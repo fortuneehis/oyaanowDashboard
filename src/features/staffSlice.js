@@ -5,13 +5,17 @@ const initialState = {
   company: [],
   addCompanyStatus: "",
   staff: [],
-  status: null,
+  getCompaniesStatus: "",
+  getStaffsStatus: "",
 };
 
 export const getCompanies = createAsyncThunk("staff/getCompanies", async () => {
-  const res = await API.get("company/admin");
-
-  return res.data.company;
+  try {
+    const res = await API.get("company/admin");
+    return res.data.company;
+  } catch (error) {
+    alert(error.response.data.message);
+  }
 });
 
 export const registerCompany = createAsyncThunk(
@@ -31,16 +35,46 @@ export const registerCompany = createAsyncThunk(
 export const removeCompany = createAsyncThunk(
   "staff/removeCompany",
   async (id, { dispatch }) => {
-    const res = API.delete(`company/admin/${id}`);
-    dispatch(getCompanies());
+    try {
+      const res = await API.delete(`company/admin/${id}`);
+      dispatch(getCompanies());
+    } catch (error) {
+      alert(error.response.data.message);
+    }
   }
 );
 
 export const getAllStaff = createAsyncThunk("staff/getAllStaff", async () => {
-  const res = await API.get("staff/getall");
-
-  return res.data.staff;
+  try {
+    const res = await API.get("staff/getall");
+    return res.data.staff;
+  } catch (error) {
+    alert(error.response.data.message);
+  }
 });
+export const registerStaff = createAsyncThunk(
+  "staff/registerStaff",
+  async (user, { dispatch }) => {
+    try {
+      const res = await API.post("/staff/register", user);
+      dispatch(getAllStaff());
+    } catch (error) {
+      alert(error.response.data.message);
+    }
+  }
+);
+
+export const removeStaff = createAsyncThunk(
+  "staff/removeStaff",
+  async (id, { dispatch }) => {
+    try {
+      const res = await API.delete(`staff/${id}`);
+      dispatch(getAllStaff());
+    } catch (error) {
+      alert(error.response.data.message);
+    }
+  }
+);
 
 const staffSlice = createSlice({
   name: "staff",
@@ -52,32 +86,33 @@ const staffSlice = createSlice({
   },
   extraReducers: {
     [getCompanies.pending]: (state) => {
-      state.status = "loading";
+      state.getCompaniesStatus = "loading";
     },
     [getCompanies.fulfilled]: (state, { payload }) => {
       return {
         ...state,
         company: payload,
-        status: "success",
+        getCompaniesStatus: "success",
       };
     },
     [getCompanies.rejected]: (state) => {
-      state.status = "failed";
+      state.getCompaniesStatus = "failed";
     },
     [getAllStaff.pending]: (state) => {
       return {
         ...state,
+        getStaffsStatus: "loading",
       };
     },
     [getAllStaff.fulfilled]: (state, { payload }) => {
       return {
         ...state,
         staff: payload,
-        status: "success",
+        getStaffsStatus: "success",
       };
     },
     [getAllStaff.rejected]: (state) => {
-      state.status = "failed";
+      state.getStaffsStatus = "failed";
     },
     [registerCompany.pending]: (state) => {
       state.addCompanyStatus = "loading";

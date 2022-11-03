@@ -8,11 +8,17 @@ import { useSelector, useDispatch } from "react-redux";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { getDubaiVisa } from "../features/bookings/bookingsSlice";
+import { BiDownload } from "react-icons/bi";
+import DubaiVisaModal from "./DubaiVisaModal";
 
 export default function StickyHeadTable() {
   const dispatch = useDispatch();
   const [search, setSearch] = useState("");
   const [todayValue, setTodayValue] = useState("");
+
+  const [dubaiImage, setDubaiImage] = useState([]);
+  const [dubaiText, setDubaiText] = useState("text");
+  const [dubaiModal, setDubaiModal] = useState(false);
 
   var today = new Date();
   var dd = String(today.getDate()).padStart(2, "0");
@@ -21,8 +27,11 @@ export default function StickyHeadTable() {
 
   today = yyyy + "-" + mm + "-" + dd;
 
+  useEffect(() => {});
+
   useEffect(() => {
     console.log(today);
+    console.log(2);
   }, [search]);
 
   useEffect(() => {
@@ -31,7 +40,7 @@ export default function StickyHeadTable() {
 
   const { dubaivisa } = useSelector((state) => state.bookings);
   return (
-    <div className="max-w-full">
+    <div className="max-w-7xl">
       <div className="w-full flex  items-center justify-between px-4">
         <input
           value={search}
@@ -53,7 +62,7 @@ export default function StickyHeadTable() {
           <option value={today}>Today</option>
         </select>
       </div>
-      {/* <Paper className="w-full lg:w-4/4 mx-auto">
+      <Paper className="w-full lg:w-4/4 mx-auto">
         <h3 className="text-lg font-bold mx-auto">Dubai Visa Bookings</h3>
         <TableContainer sx={{ maxHeight: 440 }}>
           <Table stickyHeader aria-label="sticky table">
@@ -67,6 +76,9 @@ export default function StickyHeadTable() {
                 </TableCell>
                 <TableCell className="text-center bg-black text-white">
                   Middle Name
+                </TableCell>
+                <TableCell className="text-center bg-black text-white">
+                  Ticket Id
                 </TableCell>
                 <TableCell className="text-center bg-black text-white">
                   Nationality
@@ -117,7 +129,16 @@ export default function StickyHeadTable() {
                   Arrival Date
                 </TableCell>
                 <TableCell className="text-center bg-black text-white">
-                  Traveller's Date
+                  Number of Travellers
+                </TableCell>
+                <TableCell className="text-center bg-black text-white">
+                  Companion's Data Pages
+                </TableCell>
+                <TableCell className="text-center bg-black text-white">
+                  Companion's Passport Photos
+                </TableCell>
+                <TableCell className="text-center bg-black text-white">
+                  Companion's Birth Certificate
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -126,7 +147,23 @@ export default function StickyHeadTable() {
                 .filter((customer) => {
                   return search.toLowerCase() === ""
                     ? customer
-                    : customer.firstname.toLowerCase().includes(search);
+                    : customer._id.includes(search);
+                })
+                .filter((customer) => {
+                  const bookingDate = customer.travellingInfo.departureDate;
+                  var todays = new Date(bookingDate);
+                  var dd = String(todays.getDate()).padStart(2, "0");
+                  var mm = String(todays.getMonth() + 1).padStart(2, "0");
+                  var yyyy = todays.getFullYear();
+
+                  todays = yyyy + "-" + mm + "-" + dd;
+                  console.log(todays);
+                  console.log(todayValue);
+                  if (todayValue === "") {
+                    return customer;
+                  } else if (todayValue === todays) {
+                    return customer;
+                  }
                 })
                 .map((row) => (
                   <TableRow key={row._id}>
@@ -139,7 +176,7 @@ export default function StickyHeadTable() {
                     <TableCell className="text-center">
                       {row.middlename}
                     </TableCell>
-
+                    <TableCell className="text-center">{row._id}</TableCell>
                     <TableCell className="text-center">
                       {row.nationality}
                     </TableCell>
@@ -158,8 +195,14 @@ export default function StickyHeadTable() {
                     <TableCell className="text-center">
                       {row.phoneNumber}
                     </TableCell>
-                    <TableCell className="text-center">
-                       {row.passportDetails.photo} 
+                    <TableCell className="text-center ">
+                      <a
+                        className="border px-2 transition hover:scale-105 active:scale-90"
+                        href={row.passportDetails.photo}
+                        download={`${row.firstname}passport photo`}
+                      >
+                        Download
+                      </a>
                     </TableCell>
                     <TableCell className="text-center">
                       {row.passportDetails.number}
@@ -168,7 +211,13 @@ export default function StickyHeadTable() {
                       {row.passportDetails.expDate}
                     </TableCell>
                     <TableCell className="text-center">
-                       {row.passportDetails.dataPage} 
+                      <a
+                        className="border px-2 transition hover:scale-105 active:scale-90"
+                        href={row.passportDetails.dataPage}
+                        download={`${row.firstname}datapage`}
+                      >
+                        Download
+                      </a>
                     </TableCell>
                     <TableCell className="text-center">
                       {row.travellingInfo.departureDate}
@@ -179,12 +228,65 @@ export default function StickyHeadTable() {
                     <TableCell className="text-center">
                       {row.travellingInfo.travellersNo}
                     </TableCell>
+                    <TableCell className="text-center">
+                      <button
+                        onClick={() => {
+                          setDubaiImage(row.travellingCompanionInfo.dataPages);
+
+                          setDubaiModal(true);
+                          setDubaiText("Data Pages");
+                        }}
+                        className="border transition px-2 hover:scale-105 active:scale-90"
+                      >
+                        Click to View
+                      </button>
+                    </TableCell>
+                    <TableCell className="text-center">
+                      <button
+                        onClick={() => {
+                          setDubaiImage(
+                            row.travellingCompanionInfo.passportPhotos
+                          );
+
+                          setDubaiModal(true);
+                          setDubaiText("Passport Photos");
+                        }}
+                        className="border transition px-2 hover:scale-105 active:scale-90"
+                      >
+                        Click to View
+                      </button>
+                    </TableCell>
+                    <TableCell className="text-center">
+                      <button
+                        onClick={() => {
+                          setDubaiImage(
+                            row.travellingCompanionInfo.birthCertificate
+                          );
+
+                          setDubaiModal(true);
+                          setDubaiText("Birth Certificates");
+                        }}
+                        className="border transition px-2 hover:scale-105 active:scale-90"
+                      >
+                        Click to View
+                      </button>
+                    </TableCell>
                   </TableRow>
                 ))}
             </TableBody>
           </Table>
         </TableContainer>
-      </Paper> */}
+      </Paper>
+      {dubaiModal && (
+        <DubaiVisaModal
+          dubaiModal={dubaiModal}
+          dubaiImage={dubaiImage}
+          setDubaiImage={setDubaiImage}
+          setDubaiModal={setDubaiModal}
+          dubaiText={dubaiText}
+          setDubaiText={setDubaiText}
+        />
+      )}
     </div>
   );
 }

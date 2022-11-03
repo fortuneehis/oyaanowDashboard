@@ -7,7 +7,6 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import { useSelector, useDispatch } from "react-redux";
 import TableHead from "@mui/material/TableHead";
-import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import {
   getCustomers,
@@ -32,7 +31,6 @@ export default function StickyHeadTable() {
 
   useEffect(() => {
     dispatch(getCustomers());
-    dispatch(getBusCharter());
   }, [dispatch]);
 
   const { list, customers } = useSelector((state) => state.bookings);
@@ -82,6 +80,9 @@ export default function StickyHeadTable() {
                   State From
                 </TableCell>
                 <TableCell className="text-center bg-black text-white">
+                  TicketId
+                </TableCell>
+                <TableCell className="text-center bg-black text-white">
                   Terminal To
                 </TableCell>
                 <TableCell className="text-center bg-black text-white">
@@ -112,16 +113,17 @@ export default function StickyHeadTable() {
                 .filter((customer) => {
                   return search.toLowerCase() === ""
                     ? customer
-                    : customer.email.toLowerCase().includes(search);
+                    : customer._id.includes(search);
                 })
                 .filter((customer) => {
-                  const bookingDate = customer.createdAt;
+                  const bookingDate = customer.date;
                   var todays = new Date(bookingDate);
                   var dd = String(todays.getDate()).padStart(2, "0");
                   var mm = String(todays.getMonth() + 1).padStart(2, "0");
                   var yyyy = todays.getFullYear();
 
                   todays = yyyy + "-" + mm + "-" + dd;
+                  console.log(todays);
                   console.log(todayValue);
                   if (todayValue === "") {
                     return customer;
@@ -145,6 +147,7 @@ export default function StickyHeadTable() {
                     <TableCell className="text-center">
                       {row.state.from}
                     </TableCell>
+                    <TableCell className="text-center">{row._id}</TableCell>
                     <TableCell className="text-center">
                       {row.terminal.to}
                     </TableCell>

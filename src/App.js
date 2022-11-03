@@ -16,6 +16,7 @@ import DashboardStaffBookings from "./components/DashboardStaffBookings";
 import DubaiVisa from "./components/DubaiVisa";
 import CompanyModal from "./components/CompanyModal";
 import PersonalPageLoader from "./components/PersonalPageLoader";
+import DashboardCharterBookings from "./components/DashboardCharterBookings";
 
 function App() {
   const [companyModal, setCompanyModal] = useState(false);
@@ -32,11 +33,15 @@ function App() {
     removeRouteStatus,
   } = useSelector((state) => state.user);
   const {
-    getStaffCustomerStatus,
+    getStaffCustomersStatus,
     getBusCharterStatus,
     getDubaiVisaStatus,
     getCustomersStatus,
   } = useSelector((state) => state.bookings);
+  const { getCompaniesStatus, getStaffsStatus } = useSelector(
+    (state) => state.staff
+  );
+
   return (
     <div>
       <Routes>
@@ -52,6 +57,10 @@ function App() {
             <Route path="/dashboard/bookings" element={<DashboardBookings />} />
 
             <Route path="/dashboard/dubai" element={<DubaiVisa />} />
+            <Route
+              path="/dashboard/charter"
+              element={<DashboardCharterBookings />}
+            />
             <Route
               path="/dashboard/staffbookings"
               element={<DashboardStaffBookings />}
@@ -81,10 +90,12 @@ function App() {
       removeBusStatus === "loading" ||
       addRouteStatus === "loading" ||
       removeRouteStatus === "loading" ||
-      getStaffCustomerStatus === "loading" ||
+      getStaffCustomersStatus === "loading" ||
       getBusCharterStatus === "loading" ||
       getDubaiVisaStatus === "loading" ||
-      getCustomersStatus === "loading" ? (
+      getCustomersStatus === "loading" ||
+      getCompaniesStatus === "loading" ||
+      getStaffsStatus === "loading" ? (
         <PersonalPageLoader />
       ) : null}
     </div>

@@ -12,8 +12,6 @@ const Register = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { company, addCompanyStatus } = useSelector((state) => state.staff);
-
   const [image, setImage] = useState("");
 
   useEffect(() => {
@@ -127,7 +125,7 @@ const Register = () => {
             ))}
           </select>
         </div>
-        <button className="bg-black text-white px-4 py-2 rounded-sm mt-7 transition hover:scale-105">
+        <button className="bg-black text-white px-4 py-2 rounded-sm mt-7 transition hover:scale-105 active:scale-90">
           REGISTER
         </button>
       </form>
@@ -136,7 +134,7 @@ const Register = () => {
         onClick={() => {
           navigate("/dashboard/profile");
         }}
-        className="flex space-x-1 items-center border px-2 py-1"
+        className="flex space-x-1 items-center border px-2 py-1 hover:scale-105 active:scale-90 transition"
       >
         <button>Back To Dashboard</button>
         <BsBoxArrowRight />

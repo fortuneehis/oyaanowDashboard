@@ -83,9 +83,36 @@ export const removeRoute = createAsyncThunk(
   async (routeData, { dispatch }) => {
     try {
       const { routeId, companyId } = routeData;
-      console.log(`routeId ${routeId}`);
-      console.log(`companyId ${companyId}`);
       const res = await API.patch(`/company/removeroute/${routeId}`, {
+        company: `${companyId}`,
+      });
+      dispatch(getCompany());
+    } catch (error) {
+      alert(error.response.data.message);
+    }
+  }
+);
+
+export const addNyscRoute = createAsyncThunk(
+  "company/addNyscRoute",
+  async (nyscRouteData, { dispatch }) => {
+    try {
+      console.log(nyscRouteData);
+      const res = await API.post("/company/addnyscroute", nyscRouteData);
+      dispatch(getCompany());
+    } catch (error) {
+      console.log(error.response);
+      alert(error.response.data.message);
+    }
+  }
+);
+
+export const removeNyscRoute = createAsyncThunk(
+  "company/removeNyscRoute",
+  async (nyscRouteData, { dispatch }) => {
+    try {
+      const { nyscRouteId, companyId } = nyscRouteData;
+      const res = await API.patch(`/company/removenyscroute/${nyscRouteId}`, {
         company: `${companyId}`,
       });
       dispatch(getCompany());

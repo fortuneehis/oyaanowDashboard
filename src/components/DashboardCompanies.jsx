@@ -4,14 +4,24 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { getCompany } from "../features/companySlice";
-import { addBus, addTerminal, addRoute } from "../features/companySlice";
+import {
+  addBus,
+  addTerminal,
+  addRoute,
+  addNyscRoute,
+} from "../features/companySlice";
 import AdminTerminalTable from "./AdminTerminalTable";
 import AdminBusTable from "./AdminBusTable";
 import AdminRouteTable from "./AdminRouteTable";
+import AdminNyscTable from "./AdminNyscTable";
+import ReservationModal from "./ReservationModal";
 
 export default function Company() {
   const dispatch = useDispatch();
   const { company } = useSelector((state) => state.company);
+
+  const [reservation, setReservation] = useState([]);
+  const [reservationModal, setReservationModal] = useState(false);
 
   let routeList = [];
   company.forEach((comp) => {
@@ -21,6 +31,25 @@ export default function Company() {
           routes={comp.routes}
           id={comp._id}
           companyName={comp.name}
+          reservation={reservation}
+          setReservation={setReservation}
+          setReservationModal={setReservationModal}
+        />
+      );
+    }
+  });
+
+  let nyscRouteList = [];
+  company.forEach((comp) => {
+    if (comp.nyscRoutes.length !== 0) {
+      nyscRouteList.push(
+        <AdminNyscTable
+          nyscRoutes={comp.nyscRoutes}
+          id={comp._id}
+          companyName={comp.name}
+          reservation={reservation}
+          setReservation={setReservation}
+          setReservationModal={setReservationModal}
         />
       );
     }
@@ -87,10 +116,30 @@ export default function Company() {
     buses: [
       {
         id: "",
-        seats: "",
+        fare: "",
       },
     ],
-    fare: "",
+    departureTimes: [],
+    departureDate: "",
+    recurring: "",
+  });
+
+  const [nyscRouteData, setNyscRouteData] = useState({
+    company: "",
+    state: {
+      from: "",
+      to: "",
+    },
+    terminal: {
+      from: "",
+      to: "",
+    },
+    buses: [
+      {
+        id: "",
+        fare: "",
+      },
+    ],
     departureTimes: [],
     departureDate: "",
     recurring: "",
@@ -110,6 +159,22 @@ export default function Company() {
       ],
     });
   };
+
+  const handleAddNyscBus = (e) => {
+    const newBus = {
+      id: e.target.value,
+    };
+    setNyscRouteData({
+      ...nyscRouteData,
+      buses: [
+        {
+          ...nyscRouteData.buses[0],
+          id: e.target.value,
+        },
+      ],
+    });
+  };
+
   const addTheRoute = (e) => {
     e.preventDefault();
     dispatch(addRoute(routeData));
@@ -121,7 +186,22 @@ export default function Company() {
         from: "",
         to: "",
       },
-      fare: "",
+      departureTimes: [],
+      departureDate: "",
+      recurring: "",
+    });
+  };
+
+  const addTheNyscRoute = (e) => {
+    e.preventDefault();
+    dispatch(addNyscRoute(nyscRouteData));
+    setNyscRouteData({
+      ...nyscRouteData,
+      company: "",
+      state: {
+        from: "",
+        to: "",
+      },
       departureTimes: [],
       departureDate: "",
       recurring: "",
@@ -148,7 +228,7 @@ export default function Company() {
   };
   const [busData, setBusData] = useState({
     company: "",
-    seats: "",
+    seats: 14,
     picture: "",
     name: "",
     plateNumber: "",
@@ -182,7 +262,7 @@ export default function Company() {
 
     setBusData({
       company: "",
-      seats: "",
+      seats: 14,
       picture: " ",
       name: "",
       plateNumber: "",
@@ -227,7 +307,7 @@ export default function Company() {
               ))}
             </select>
           </div>
-          <div className="flex flex-col lg:flex-row  items-center justify-between">
+          {/* <div className="flex flex-col lg:flex-row  items-center justify-between">
             <label htmlFor="seats">Seats</label>
             <input
               value={busData.seats}
@@ -238,7 +318,7 @@ export default function Company() {
               type="text"
               name="seats"
             />
-          </div>
+          </div> */}
           <div className="flex flex-col lg:flex-row  items-center justify-between">
             <label htmlFor="picture">Picture</label>
             <input
@@ -468,7 +548,7 @@ export default function Company() {
             >
               <option value="">Terminal From</option>
               {terminals.map((terminal) => (
-                <option value={terminal._id}>{terminal.landmark}</option>
+                <option value={terminal._id}>{terminal.location}</option>
               ))}
             </select>
             <select
@@ -485,7 +565,7 @@ export default function Company() {
             >
               <option value="">Terminal To</option>
               {terminals.map((terminal) => (
-                <option value={terminal._id}>{terminal.landmark}</option>
+                <option value={terminal._id}>{terminal.location}</option>
               ))}
             </select>
           </div>
@@ -508,30 +588,18 @@ export default function Company() {
                   buses: [
                     {
                       ...routeData.buses[0],
-                      seats: e.target.value,
+                      fare: e.target.value,
                     },
                   ],
                 });
               }}
               className="text-black border px-2 py-1 outline-none shadow-sm rounded-sm"
               type="text"
-              placeholder="Number Of Seats"
-              name="seats"
-            />
-          </div>
-
-          <div className="flex flex-col lg:flex-row  items-center justify-between">
-            <label htmlFor="fare">Fare</label>
-            <input
-              value={routeData.fare}
-              onChange={(e) => {
-                setRouteData({ ...routeData, fare: e.target.value });
-              }}
-              className="text-black border px-2 py-1 outline-none shadow-sm rounded-sm"
-              type="text"
+              placeholder="Fare"
               name="fare"
             />
           </div>
+
           <div className="flex flex-col lg:flex-row  items-center justify-between">
             <label htmlFor="departureTimes">Departure Time</label>
             <input
@@ -573,7 +641,8 @@ export default function Company() {
               className="text-black shadow-sm px-2 py border"
             >
               <option value="">Please Select</option>
-              <option value="once">Once</option>
+              <option value="none">None</option>
+              <option value="everyday">Everyday</option>
               <option value="once a week">Once a week</option>
               <option value="once a month">Once a month</option>
             </select>
@@ -588,6 +657,218 @@ export default function Company() {
           </div>
         </form>
       </div>
+
+      {nyscRouteList.length > 0 && (
+        <div className="my-7 max-w-7xl">
+          <button className="bg-slate-800 text-white w-full text-xl py-2 font-bold">
+            Nysc Routes
+          </button>
+        </div>
+      )}
+
+      <div className="max-w-md lg:max-w-5xl mx-auto">{nyscRouteList}</div>
+
+      <div className="my-7 max-w-7xl ">
+        <button className="bg-slate-800 text-white w-full text-xl py-2 font-bold">
+          Add Nysc Route
+        </button>
+        <form
+          onSubmit={addTheNyscRoute}
+          className="shadow-2xl relative text-black w-3/4 lg:w-3/6 mx-auto my-4 space-y-4 py-2 px-2 rounded-md"
+        >
+          <div className="flex flex-col lg:flex-row items-center justify-between">
+            <label htmlFor="CompanyID">Company</label>
+            <select
+              value={nyscRouteData.company}
+              className="text-black border px-2 py-1 outline-none rounded-sm shadow-sm"
+              name="company"
+              id="company"
+              onChange={(e) => {
+                setNyscRouteData({ ...nyscRouteData, company: e.target.value });
+              }}
+            >
+              <option value="">Select company</option>
+              {company.map((company) => (
+                <option key={company._id} value={company._id}>
+                  {company.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="flex space-y-2 flex-col  items-center lg:items-start">
+            <label htmlFor="state">State</label>
+            <input
+              value={nyscRouteData.state.to}
+              placeholder="To where"
+              onChange={(e) => {
+                setNyscRouteData({
+                  ...nyscRouteData,
+                  state: {
+                    ...nyscRouteData.state,
+                    to: e.target.value,
+                  },
+                });
+              }}
+              className="text-black border px-2 py-1 outline-none w-full shadow-sm rounded-sm"
+              type="text"
+              name="state"
+            />
+            <input
+              value={nyscRouteData.state.from}
+              placeholder="From where"
+              onChange={(e) => {
+                setNyscRouteData({
+                  ...nyscRouteData,
+                  state: {
+                    ...nyscRouteData.state,
+                    from: e.target.value,
+                  },
+                });
+              }}
+              className="text-black border px-2 py-1 outline-none w-full shadow-sm rounded-sm"
+              type="text"
+              name="state"
+            />
+          </div>
+
+          <div className="flex flex-col items-center lg:items-start space-y-2">
+            <label htmlFor="terminal">Terminal</label>
+            <select
+              className="text-black border px-2 py-1 outline-none shadow-sm w-full rounded-sm"
+              onChange={(e) => {
+                setNyscRouteData((state) => ({
+                  ...state,
+                  terminal: {
+                    ...state.terminal,
+                    from: e.target.value,
+                  },
+                }));
+              }}
+            >
+              <option value="">Terminal From</option>
+              {terminals.map((terminal) => (
+                <option value={terminal._id}>{terminal.location}</option>
+              ))}
+            </select>
+            <select
+              className="text-black border px-2 py-1 outline-none shadow-sm w-full rounded-sm"
+              onChange={(e) => {
+                setNyscRouteData({
+                  ...nyscRouteData,
+                  terminal: {
+                    ...nyscRouteData.terminal,
+                    to: e.target.value,
+                  },
+                });
+              }}
+            >
+              <option value="">Terminal To</option>
+              {terminals.map((terminal) => (
+                <option value={terminal._id}>{terminal.location}</option>
+              ))}
+            </select>
+          </div>
+
+          <div className="flex flex-col items-center lg:items-start space-y-2">
+            <label htmlFor="buses">Bus</label>
+            <select
+              className="text-black border px-2 py-1 outline-none shadow-sm w-full rounded-sm"
+              onChange={handleAddNyscBus}
+            >
+              <option value="">Bus</option>
+              {buses.map((bus) => (
+                <option value={bus._id}>{bus.name}</option>
+              ))}
+            </select>
+            <input
+              onChange={(e) => {
+                setNyscRouteData({
+                  ...nyscRouteData,
+                  buses: [
+                    {
+                      ...nyscRouteData.buses[0],
+                      fare: e.target.value,
+                    },
+                  ],
+                });
+              }}
+              className="text-black border px-2 py-1 outline-none shadow-sm rounded-sm"
+              type="text"
+              placeholder="Fare"
+              name="fare"
+            />
+          </div>
+
+          <div className="flex flex-col lg:flex-row  items-center justify-between">
+            <label htmlFor="departureTimes">Departure Time</label>
+            <input
+              value={nyscRouteData.departureTimes}
+              onChange={(e) => {
+                setNyscRouteData({
+                  ...nyscRouteData,
+                  departureTimes: [e.target.value],
+                });
+              }}
+              className="text-black border px-2 py-1 outline-none shadow-sm rounded-sm"
+              type="time"
+              name="departureTimes"
+              multiple
+            />
+          </div>
+          <div className="flex flex-col lg:flex-row  items-center justify-between">
+            <label htmlFor="departureDate">Departure Date</label>
+            <input
+              value={nyscRouteData.departureDate}
+              onChange={(e) => {
+                setNyscRouteData({
+                  ...nyscRouteData,
+                  departureDate: e.target.value,
+                });
+              }}
+              className="text-black border px-2 py-1 outline-none shadow-sm rounded-sm"
+              type="date"
+              name="departureDate"
+            />
+          </div>
+          <div className="flex flex-col lg:flex-row  items-center justify-between">
+            <label htmlFor="recurring">Recurring</label>
+
+            <select
+              value={nyscRouteData.recurring}
+              onChange={(e) => {
+                setNyscRouteData({
+                  ...nyscRouteData,
+                  recurring: e.target.value,
+                });
+              }}
+              name="recurring"
+              id="recurring"
+              className="text-black shadow-sm px-2 py border"
+            >
+              <option value="">Please Select</option>
+              <option value="none">None</option>
+              <option value="everyday">Everyday</option>
+              <option value="once a week">Once a week</option>
+              <option value="once a month">Once a month</option>
+            </select>
+          </div>
+          <div className="flex justify-center lg:justify-start">
+            <button
+              className="bg-black text-white px-4 py-2 font-bold flex justify-center rounded-sm transition active:scale-90 hover:scale-105"
+              type="submit"
+            >
+              ADD NYSC ROUTE
+            </button>
+          </div>
+        </form>
+      </div>
+      {reservationModal && (
+        <ReservationModal
+          reservation={reservation}
+          setReservationModal={setReservationModal}
+        />
+      )}
     </div>
   );
 }

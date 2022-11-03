@@ -6,31 +6,27 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import { useSelector } from "react-redux";
 import TableHead from "@mui/material/TableHead";
-import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { getCompany } from "../features/companySlice";
 import DeleteIcon from "@mui/icons-material/Delete";
-import AdminRouteModal from "./AdminRouteModal";
+import AdminNyscModal from "./AdminNyscModal";
 
 export default function RouteTable({
-  routes,
+  nyscRoutes,
   id,
   companyName,
   reservation,
   setReservation,
   setReservationModal,
 }) {
-  const [routeId, setRouteId] = useState("");
+  const [nyscRouteId, setNyscRouteId] = useState("");
   const [companyId, setCompanyId] = useState("");
-  const [adminRouteModal, setAdminRouteModal] = useState(false);
+  const [adminNyscModal, setAdminNyscModal] = useState(false);
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    console.log(reservation);
-  });
   useEffect(() => {
     dispatch(getCompany());
   }, [dispatch]);
@@ -43,10 +39,10 @@ export default function RouteTable({
           overflow: "hidden",
         }}
       >
-        {routes.length > 1 ? (
-          <h2 className="font-bold text-center">{companyName} Routes</h2>
+        {nyscRoutes.length > 1 ? (
+          <h2 className="font-bold text-center">{companyName} Nysc Routes</h2>
         ) : (
-          <h2 className="font-bold text-center">{companyName} Route</h2>
+          <h2 className="font-bold text-center">{companyName} Nysc Route</h2>
         )}
         <TableContainer sx={{ maxHeight: 440 }}>
           <Table stickyHeader aria-label="sticky table">
@@ -93,7 +89,7 @@ export default function RouteTable({
               </TableRow>
             </TableHead>
             <TableBody>
-              {routes.map((row) => (
+              {nyscRoutes.map((row) => (
                 <TableRow>
                   <TableCell className="text-center">{row.state.to}</TableCell>
                   <TableCell>{row.state.from}</TableCell>
@@ -135,12 +131,11 @@ export default function RouteTable({
                       Click to View
                     </button>
                   </TableCell>
-
                   <TableCell
                     onClick={() => {
-                      setRouteId(row._id);
+                      setNyscRouteId(row._id);
                       setCompanyId(id);
-                      setAdminRouteModal(true);
+                      setAdminNyscModal(true);
                     }}
                   >
                     <DeleteIcon className="cursor-pointer hover:scale-105 transition" />
@@ -151,13 +146,13 @@ export default function RouteTable({
           </Table>
         </TableContainer>
       </Paper>
-      {adminRouteModal && (
-        <AdminRouteModal
-          routeId={routeId}
-          setRouteId={setRouteId}
+      {adminNyscModal && (
+        <AdminNyscModal
+          nyscRouteId={nyscRouteId}
+          setNyscRouteId={setNyscRouteId}
           companyId={companyId}
           setCompanyId={setCompanyId}
-          setAdminRouteModal={setAdminRouteModal}
+          setAdminNyscModal={setAdminNyscModal}
         />
       )}
     </div>

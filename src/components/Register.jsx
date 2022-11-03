@@ -2,10 +2,12 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { BsBoxArrowRight } from "react-icons/bs";
 import { API } from "../hooks/axiosInterceptor";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { registerStaff } from "../features/staffSlice";
 
 const Register = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { company } = useSelector((state) => state.company);
 
   const [user, setUser] = useState({
@@ -22,8 +24,9 @@ const Register = () => {
   const registerUser = async (e) => {
     e.preventDefault();
     console.log(user);
-    const res = await API.post("/staff/register", user);
-    console.log(res);
+    // const res = await API.post("/staff/register", user);
+    dispatch(registerStaff(user));
+
     setUser({
       ...user,
       firstname: "",

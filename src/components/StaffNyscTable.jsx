@@ -4,49 +4,43 @@ import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
-import { useSelector } from "react-redux";
 import TableHead from "@mui/material/TableHead";
-import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { getCompany } from "../features/companySlice";
 import DeleteIcon from "@mui/icons-material/Delete";
-import AdminRouteModal from "./AdminRouteModal";
 
-export default function RouteTable({
-  routes,
-  id,
-  companyName,
-  reservation,
-  setReservation,
-  setReservationModal,
-}) {
-  const [routeId, setRouteId] = useState("");
+import StaffNyscModal from "./StaffNyscModal";
+
+export default function RouteTable() {
+  const { user } = useSelector((state) => state.user);
+  const [nyscRouteId, setNyscRouteId] = useState("");
   const [companyId, setCompanyId] = useState("");
-  const [adminRouteModal, setAdminRouteModal] = useState(false);
+  const [staffNyscModal, setStaffNyscModal] = useState(false);
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    console.log(reservation);
-  });
-  useEffect(() => {
-    dispatch(getCompany());
-  }, [dispatch]);
-
   return (
     <div>
+      <div className="my-7 max-w-7xl">
+        <button className="bg-slate-800 text-white w-full text-xl py-2 font-bold">
+          Nysc Routes
+        </button>
+      </div>
       <Paper
         sx={{
           width: "100%",
           overflow: "hidden",
         }}
       >
-        {routes.length > 1 ? (
-          <h2 className="font-bold text-center">{companyName} Routes</h2>
+        {user.company.nyscRoutes.length > 1 ? (
+          <h2 className="font-bold text-center">
+            {user.company.name} Nysc Routes
+          </h2>
         ) : (
-          <h2 className="font-bold text-center">{companyName} Route</h2>
+          <h2 className="font-bold text-center">
+            {user.company.name} Nysc Route
+          </h2>
         )}
         <TableContainer sx={{ maxHeight: 440 }}>
           <Table stickyHeader aria-label="sticky table">
@@ -86,14 +80,11 @@ export default function RouteTable({
                 <TableCell className="bg-black text-white text-center">
                   Available Seats
                 </TableCell>
-                <TableCell className="bg-black text-white text-center">
-                  Reservations
-                </TableCell>
                 <TableCell className="bg-black  text-center">Delete</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {routes.map((row) => (
+              {user.company.nyscRoutes.map((row) => (
                 <TableRow>
                   <TableCell className="text-center">{row.state.to}</TableCell>
                   <TableCell>{row.state.from}</TableCell>
@@ -123,24 +114,12 @@ export default function RouteTable({
                   <TableCell className="text-center">
                     {row.buses[0].availableSeats}
                   </TableCell>
-                  <TableCell className="text-center">
-                    <button
-                      onClick={() => {
-                        setReservation(row.buses[0].reservations);
-                        setReservationModal(true);
-                        console.log(reservation);
-                      }}
-                      className="border transition hover:scale-105 active:scale-90"
-                    >
-                      Click to View
-                    </button>
-                  </TableCell>
 
                   <TableCell
                     onClick={() => {
-                      setRouteId(row._id);
-                      setCompanyId(id);
-                      setAdminRouteModal(true);
+                      setNyscRouteId(row._id);
+                      setCompanyId(user.company._id);
+                      setStaffNyscModal(true);
                     }}
                   >
                     <DeleteIcon className="cursor-pointer hover:scale-105 transition" />
@@ -151,13 +130,13 @@ export default function RouteTable({
           </Table>
         </TableContainer>
       </Paper>
-      {adminRouteModal && (
-        <AdminRouteModal
-          routeId={routeId}
-          setRouteId={setRouteId}
+      {staffNyscModal && (
+        <StaffNyscModal
+          nyscRouteId={nyscRouteId}
+          setNyscRouteId={setNyscRouteId}
           companyId={companyId}
           setCompanyId={setCompanyId}
-          setAdminRouteModal={setAdminRouteModal}
+          setStaffNyscModal={setStaffNyscModal}
         />
       )}
     </div>

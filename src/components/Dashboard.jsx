@@ -131,8 +131,8 @@ export default function PersistentDrawerLeft() {
 
         <Box className="flex gap-y-2 flex-col pl-5 mb-5">
           <Typography variant="h6">Dashboard</Typography>
-          <Typography variant="h7">Username</Typography>
-          <Typography variant="h7">Company</Typography>
+          <Typography variant="h7">{user.staff.email}</Typography>
+          {user.company && <p>Company : {user.company.name}</p>}
         </Box>
         <Divider />
         <List>
@@ -191,6 +191,19 @@ export default function PersistentDrawerLeft() {
                     <BookIcon />
                   </ListItemIcon>
                   <ListItemText primary={"Dubai Bookings"} />
+                </ListItemButton>
+              </ListItem>
+            </NavLink>
+          )}
+
+          {user.staff.roles.admin && (
+            <NavLink to="/dashboard/charter">
+              <ListItem disablePadding>
+                <ListItemButton>
+                  <ListItemIcon>
+                    <BookIcon />
+                  </ListItemIcon>
+                  <ListItemText primary={"Bus Charter"} />
                 </ListItemButton>
               </ListItem>
             </NavLink>

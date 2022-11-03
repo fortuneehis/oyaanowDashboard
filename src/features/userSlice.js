@@ -32,6 +32,7 @@ export const removeBus = createAsyncThunk("user/removebus", async (busData) => {
     return busId;
   } catch (error) {
     console.log(error);
+    alert(error.response.data.message);
   }
 });
 
@@ -66,7 +67,6 @@ export const removeTerminal = createAsyncThunk(
 export const addRoute = createAsyncThunk("user/addRoute", async (routeData) => {
   try {
     const res = await API.post("/company/addroute", routeData);
-    console.log(res);
     return res.data.data;
   } catch (error) {
     alert(error.response.data.message);
@@ -82,6 +82,33 @@ export const removeRoute = createAsyncThunk(
         company: `${companyId}`,
       });
       return routeId;
+    } catch (error) {
+      alert(error.response.data.message);
+    }
+  }
+);
+
+export const addNyscRoute = createAsyncThunk(
+  "company/addNyscRoute",
+  async (nyscRouteData) => {
+    try {
+      const res = await API.post("/company/addnyscroute", nyscRouteData);
+      return res.data.data;
+    } catch (error) {
+      alert(error.response.data.message);
+    }
+  }
+);
+
+export const removeNyscRoute = createAsyncThunk(
+  "company/removeNyscRoute",
+  async (nyscRouteData) => {
+    try {
+      const { nyscRouteId, companyId } = nyscRouteData;
+      const res = await API.patch(`/company/removenyscroute/${nyscRouteId}`, {
+        company: `${companyId}`,
+      });
+      return nyscRouteId;
     } catch (error) {
       alert(error.response.data.message);
     }
@@ -269,6 +296,62 @@ const userSlice = createSlice({
     },
 
     [removeRoute.rejected]: (state) => {
+      return {
+        ...state,
+        removeRouteStatus: "Failed",
+      };
+    },
+    [addNyscRoute.pending]: (state) => {
+      return {
+        ...state,
+        addRouteStatus: "loading",
+      };
+    },
+    [addNyscRoute.fulfilled]: (state, { payload }) => {
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          company: {
+            ...state.user.company,
+            nyscRoutes: [...state.user.company.nyscRoutes, payload],
+          },
+        },
+        addRouteStatus: "successful",
+      };
+    },
+
+    [addNyscRoute.rejected]: (state) => {
+      return {
+        ...state,
+        addRouteStatus: "failed",
+      };
+    },
+    [removeNyscRoute.pending]: (state) => {
+      return {
+        ...state,
+        removeRouteStatus: "loading",
+      };
+    },
+    [removeNyscRoute.fulfilled]: (state, { payload }) => {
+      const updatedRoutes = state.user.company.nyscRoutes.filter(
+        (route) => route._id !== payload
+      );
+
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          company: {
+            ...state.user.company,
+            nyscRoutes: updatedRoutes,
+          },
+        },
+        removeRouteStatus: "successful",
+      };
+    },
+
+    [removeNyscRoute.rejected]: (state) => {
       return {
         ...state,
         removeRouteStatus: "Failed",

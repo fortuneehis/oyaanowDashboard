@@ -11,12 +11,15 @@ import TableRow from "@mui/material/TableRow";
 import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { getCompanies, removeCompany } from "../features/staffSlice";
+import StaffListModal from "./StaffListModal";
 
 import DeleteIcon from "@mui/icons-material/Delete";
 
 export default function StaffListTable() {
   const { staff } = useSelector((state) => state.staff);
 
+  const [staffModal, setStaffModal] = useState(false);
+  const [staffId, setStaffId] = useState("");
   const staffList = staff.filter((staff) => {
     if (!staff.roles.superAdmin) {
       return staff;
@@ -84,7 +87,8 @@ export default function StaffListTable() {
                         <TableCell>{row.terminal}</TableCell>
                         <TableCell
                           onClick={() => {
-                            dispatch(removeCompany(row._id));
+                            setStaffId(row._id);
+                            setStaffModal(true);
                           }}
                         >
                           <DeleteIcon className="cursor-pointer hover:scale-105 transition" />
@@ -97,6 +101,13 @@ export default function StaffListTable() {
           </TableContainer>
         </Paper>
       ) : null}
+      {staffModal && (
+        <StaffListModal
+          setStaffModal={setStaffModal}
+          staffId={staffId}
+          setStaffId={setStaffId}
+        />
+      )}
     </div>
   );
 }
