@@ -29,9 +29,6 @@ export default function RouteTable({
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log(reservation);
-  });
-  useEffect(() => {
     dispatch(getCompany());
   }, [dispatch]);
 

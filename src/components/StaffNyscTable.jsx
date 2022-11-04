@@ -12,7 +12,11 @@ import DeleteIcon from "@mui/icons-material/Delete";
 
 import StaffNyscModal from "./StaffNyscModal";
 
-export default function RouteTable() {
+export default function RouteTable({
+  reservation,
+  setReservation,
+  setReservationModal,
+}) {
   const { user } = useSelector((state) => state.user);
   const [nyscRouteId, setNyscRouteId] = useState("");
   const [companyId, setCompanyId] = useState("");
@@ -80,6 +84,9 @@ export default function RouteTable() {
                 <TableCell className="bg-black text-white text-center">
                   Available Seats
                 </TableCell>
+                <TableCell className="bg-black text-white text-center">
+                  Reservations
+                </TableCell>
                 <TableCell className="bg-black  text-center">Delete</TableCell>
               </TableRow>
             </TableHead>
@@ -114,7 +121,18 @@ export default function RouteTable() {
                   <TableCell className="text-center">
                     {row.buses[0].availableSeats}
                   </TableCell>
-
+                  <TableCell className="text-center">
+                    <button
+                      onClick={() => {
+                        setReservation(row.buses[0].reservations);
+                        setReservationModal(true);
+                        console.log(reservation);
+                      }}
+                      className="border transition hover:scale-105 active:scale-90"
+                    >
+                      Click to View
+                    </button>
+                  </TableCell>
                   <TableCell
                     onClick={() => {
                       setNyscRouteId(row._id);

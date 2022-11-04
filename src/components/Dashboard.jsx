@@ -19,6 +19,10 @@ import ListItemText from "@mui/material/ListItemText";
 import HomeIcon from "@mui/icons-material/Home";
 import PersonIcon from "@mui/icons-material/Person";
 import BookIcon from "@mui/icons-material/Book";
+import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
+import BookmarkAddIcon from "@mui/icons-material/BookmarkAdd";
+import BookmarksIcon from "@mui/icons-material/Bookmarks";
+import BookmarkIcon from "@mui/icons-material/Bookmark";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { NavLink, Outlet } from "react-router-dom";
 import axios from "axios";
@@ -132,7 +136,7 @@ export default function PersistentDrawerLeft() {
         <Box className="flex gap-y-2 flex-col pl-5 mb-5">
           <Typography variant="h6">Dashboard</Typography>
           <Typography variant="h7">{user.staff.email}</Typography>
-          {user.company && <p>Company : {user.company.name}</p>}
+          {user.company && <p>{user.company.name}</p>}
         </Box>
         <Divider />
         <List>
@@ -176,7 +180,7 @@ export default function PersistentDrawerLeft() {
               <ListItem disablePadding>
                 <ListItemButton>
                   <ListItemIcon>
-                    <BookIcon />
+                    <BookmarkIcon />
                   </ListItemIcon>
                   <ListItemText primary={"Oyaanow Bookings"} />
                 </ListItemButton>
@@ -188,7 +192,7 @@ export default function PersistentDrawerLeft() {
               <ListItem disablePadding>
                 <ListItemButton>
                   <ListItemIcon>
-                    <BookIcon />
+                    <BookmarkAddedIcon />
                   </ListItemIcon>
                   <ListItemText primary={"Dubai Bookings"} />
                 </ListItemButton>
@@ -201,9 +205,21 @@ export default function PersistentDrawerLeft() {
               <ListItem disablePadding>
                 <ListItemButton>
                   <ListItemIcon>
-                    <BookIcon />
+                    <BookmarkAddIcon />
                   </ListItemIcon>
                   <ListItemText primary={"Bus Charter"} />
+                </ListItemButton>
+              </ListItem>
+            </NavLink>
+          )}
+          {user.staff.roles.admin && (
+            <NavLink to="/dashboard/nysc">
+              <ListItem disablePadding>
+                <ListItemButton>
+                  <ListItemIcon>
+                    <BookmarksIcon />
+                  </ListItemIcon>
+                  <ListItemText primary={"Nysc Bookings"} />
                 </ListItemButton>
               </ListItem>
             </NavLink>

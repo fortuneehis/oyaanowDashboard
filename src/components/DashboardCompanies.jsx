@@ -124,6 +124,8 @@ export default function Company() {
     recurring: "",
   });
 
+  function addRouteTime(time) {}
+
   const [nyscRouteData, setNyscRouteData] = useState({
     company: "",
     state: {
@@ -256,7 +258,6 @@ export default function Company() {
   const addTheBus = (e) => {
     e.preventDefault();
     dispatch(addBus(busData));
-    // dispatch(getCompany());
 
     console.log(busData);
 
@@ -605,6 +606,7 @@ export default function Company() {
             <input
               value={routeData.departureTimes}
               onChange={(e) => {
+                // addRouteTime(e.target.value);
                 setRouteData({
                   ...routeData,
                   departureTimes: [e.target.value],

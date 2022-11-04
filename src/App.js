@@ -17,6 +17,8 @@ import DubaiVisa from "./components/DubaiVisa";
 import CompanyModal from "./components/CompanyModal";
 import PersonalPageLoader from "./components/PersonalPageLoader";
 import DashboardCharterBookings from "./components/DashboardCharterBookings";
+import NyscBookings from "./components/NyscBookings";
+import PrivateRegister from "./components/PrivateRegister";
 
 function App() {
   const [companyModal, setCompanyModal] = useState(false);
@@ -45,9 +47,12 @@ function App() {
   return (
     <div>
       <Routes>
-        <Route path="/registerUser" element={<Register />} />
         <Route path="/" element={<Login />} />
-        <Route path="/registerCompany" element={<RegisterCompany />} />
+        <Route element={<PrivateRegister />}>
+          <Route path="/registerUser" element={<Register />} />
+          <Route path="/registerCompany" element={<RegisterCompany />} />
+        </Route>
+
         <Route element={<PrivateRoutesDashboard />}>
           <Route path="dashboard" element={<Dashboard />}>
             <Route path="/dashboard/home" element={<DashboardHome />} />
@@ -69,6 +74,7 @@ function App() {
               path="/dashboard/companies"
               element={<DashboardCompanies />}
             />
+            <Route path="/dashboard/nysc" element={<NyscBookings />} />
             <Route
               path="/dashboard/admin"
               element={

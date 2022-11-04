@@ -8,10 +8,7 @@ import TableContainer from "@mui/material/TableContainer";
 import { useSelector, useDispatch } from "react-redux";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import {
-  getCustomers,
-  getBusCharter,
-} from "../features/bookings/bookingsSlice";
+import { getCustomers } from "../features/bookings/bookingsSlice";
 
 export default function StickyHeadTable() {
   const dispatch = useDispatch();
@@ -26,14 +23,10 @@ export default function StickyHeadTable() {
   today = yyyy + "-" + mm + "-" + dd;
 
   useEffect(() => {
-    console.log(today);
-  }, [search]);
-
-  useEffect(() => {
     dispatch(getCustomers());
   }, [dispatch]);
 
-  const { list, customers } = useSelector((state) => state.bookings);
+  const { customers } = useSelector((state) => state.bookings);
   return (
     <div className="max-w-full">
       <div className="w-full flex  items-center justify-between px-4">
@@ -87,6 +80,12 @@ export default function StickyHeadTable() {
                 </TableCell>
                 <TableCell className="text-center bg-black text-white">
                   Terminal From
+                </TableCell>
+                <TableCell className="text-center bg-black text-white">
+                  Departure Date
+                </TableCell>
+                <TableCell className="text-center bg-black text-white">
+                  CreatedAt
                 </TableCell>
                 <TableCell className="text-center bg-black text-white">
                   Gender
@@ -153,6 +152,10 @@ export default function StickyHeadTable() {
                     </TableCell>
                     <TableCell className="text-center">
                       {row.terminal.from}
+                    </TableCell>
+                    <TableCell className="text-center">{row.date}</TableCell>
+                    <TableCell className="text-center">
+                      {row.createdAt}
                     </TableCell>
                     <TableCell className="text-center">{row.gender}</TableCell>
                     <TableCell className="text-center">{row.bus}</TableCell>

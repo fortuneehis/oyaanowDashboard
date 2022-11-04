@@ -8,7 +8,7 @@ import TableContainer from "@mui/material/TableContainer";
 import { useSelector, useDispatch } from "react-redux";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { getBusCharter } from "../features/bookings/bookingsSlice";
+import { getCustomers } from "../features/bookings/bookingsSlice";
 
 export default function StickyHeadTable() {
   const dispatch = useDispatch();
@@ -23,10 +23,10 @@ export default function StickyHeadTable() {
   today = yyyy + "-" + mm + "-" + dd;
 
   useEffect(() => {
-    dispatch(getBusCharter());
+    dispatch(getCustomers());
   }, [dispatch]);
 
-  const { busCharter } = useSelector((state) => state.bookings);
+  const { customers } = useSelector((state) => state.bookings);
   return (
     <div className="max-w-full">
       <div className="w-full flex  items-center justify-between px-4">
@@ -52,11 +52,14 @@ export default function StickyHeadTable() {
       </div>
 
       <Paper className="w-full lg:w-4/4 mx-auto">
-        <h3 className="text-lg font-bold mx-auto">Bus Charter Bookings</h3>
+        <h3 className="text-lg font-bold mx-auto">Nysc Bookings</h3>
         <TableContainer sx={{ maxHeight: 440 }}>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>
+                <TableCell className="text-center bg-black text-white">
+                  Name
+                </TableCell>
                 <TableCell className="text-center bg-black text-white">
                   Email
                 </TableCell>
@@ -64,34 +67,60 @@ export default function StickyHeadTable() {
                   Phone Number
                 </TableCell>
                 <TableCell className="text-center bg-black text-white">
-                  Seat Number
-                </TableCell>
-                <TableCell className="text-center bg-black text-white">
-                  Departure Date
-                </TableCell>
-                <TableCell className="text-center bg-black text-white">
-                  Created At
-                </TableCell>
-                <TableCell className="text-center bg-black text-white">
-                  Ticket ID
-                </TableCell>
-                <TableCell className="text-center bg-black text-white">
                   State To
                 </TableCell>
                 <TableCell className="text-center bg-black text-white">
                   State From
                 </TableCell>
+                <TableCell className="text-center bg-black text-white">
+                  TicketId
+                </TableCell>
+                <TableCell className="text-center bg-black text-white">
+                  Terminal To
+                </TableCell>
+                <TableCell className="text-center bg-black text-white">
+                  Terminal From
+                </TableCell>
+                <TableCell className="text-center bg-black text-white">
+                  Departure Date
+                </TableCell>
+                <TableCell className="text-center bg-black text-white">
+                  CreatedAt
+                </TableCell>
+                <TableCell className="text-center bg-black text-white">
+                  Gender
+                </TableCell>
+                <TableCell className="text-center bg-black text-white">
+                  Bus
+                </TableCell>
+                <TableCell className="text-center bg-black text-white">
+                  Seats
+                </TableCell>
+                <TableCell className="text-center bg-black text-white">
+                  Price
+                </TableCell>
+                <TableCell className="text-center bg-black text-white">
+                  Company
+                </TableCell>
+                <TableCell className="text-center bg-black text-white">
+                  Kin
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {busCharter
+              {customers
+                .filter((customer) => {
+                  if (customer.nysc === "nysc") {
+                    return customer;
+                  }
+                })
                 .filter((customer) => {
                   return search.toLowerCase() === ""
                     ? customer
                     : customer._id.includes(search);
                 })
                 .filter((customer) => {
-                  const bookingDate = customer.departureDate;
+                  const bookingDate = customer.date;
                   var todays = new Date(bookingDate);
                   var dd = String(todays.getDate()).padStart(2, "0");
                   var mm = String(todays.getMonth() + 1).padStart(2, "0");
@@ -109,27 +138,37 @@ export default function StickyHeadTable() {
                 .map((row) => (
                   <TableRow key={row._id}>
                     <TableCell className="text-center font-bold">
-                      {row.email}
+                      {row.name}
                     </TableCell>
+                    <TableCell className="text-center">{row.email}</TableCell>
                     <TableCell className="text-center">
                       {row.phoneNumber}
                     </TableCell>
-                    <TableCell className="text-center">
-                      {row.seatNumber}
-                    </TableCell>
 
-                    <TableCell className="text-center">
-                      {row.departureDate}
-                    </TableCell>
-                    <TableCell className="text-center">
-                      {row.createdAt}
-                    </TableCell>
-                    <TableCell className="text-center">{row._id}</TableCell>
                     <TableCell className="text-center">
                       {row.state.to}
                     </TableCell>
                     <TableCell className="text-center">
                       {row.state.from}
+                    </TableCell>
+                    <TableCell className="text-center">{row._id}</TableCell>
+                    <TableCell className="text-center">
+                      {row.terminal.to}
+                    </TableCell>
+                    <TableCell className="text-center">
+                      {row.terminal.from}
+                    </TableCell>
+                    <TableCell className="text-center">{row.date}</TableCell>
+                    <TableCell className="text-center">
+                      {row.createdAt}
+                    </TableCell>
+                    <TableCell className="text-center">{row.gender}</TableCell>
+                    <TableCell className="text-center">{row.bus}</TableCell>
+                    <TableCell className="text-center">{row.seats}</TableCell>
+                    <TableCell className="text-center">{row.price}</TableCell>
+                    <TableCell className="text-center">{row.company}</TableCell>
+                    <TableCell className="text-center">
+                      {row.kin.firstname}
                     </TableCell>
                   </TableRow>
                 ))}

@@ -111,6 +111,12 @@ export default function StickyHeadTable() {
                   Phone Number
                 </TableCell>
                 <TableCell className="text-center bg-black text-white">
+                  Departure Date
+                </TableCell>
+                <TableCell className="text-center bg-black text-white">
+                  CreatedAt
+                </TableCell>
+                <TableCell className="text-center bg-black text-white">
                   Passport Photo
                 </TableCell>
                 <TableCell className="text-center bg-black text-white">
@@ -122,9 +128,7 @@ export default function StickyHeadTable() {
                 <TableCell className="text-center bg-black text-white">
                   Passport Data Page
                 </TableCell>
-                <TableCell className="text-center bg-black text-white">
-                  Departure Date
-                </TableCell>
+
                 <TableCell className="text-center bg-black text-white">
                   Arrival Date
                 </TableCell>
@@ -195,6 +199,12 @@ export default function StickyHeadTable() {
                     <TableCell className="text-center">
                       {row.phoneNumber}
                     </TableCell>
+                    <TableCell className="text-center">
+                      {row.travellingInfo.departureDate}
+                    </TableCell>
+                    <TableCell className="text-center">
+                      {row.createdAt}
+                    </TableCell>
                     <TableCell className="text-center ">
                       <a
                         className="border px-2 transition hover:scale-105 active:scale-90"
@@ -218,9 +228,6 @@ export default function StickyHeadTable() {
                       >
                         Download
                       </a>
-                    </TableCell>
-                    <TableCell className="text-center">
-                      {row.travellingInfo.departureDate}
                     </TableCell>
                     <TableCell className="text-center">
                       {row.travellingInfo.arrivalDate}

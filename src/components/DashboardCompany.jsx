@@ -10,13 +10,15 @@ import StaffBusTable from "./StaffBusTable";
 import StaffTerminalTable from "./StaffTerminalTable";
 import StaffRouteTable from "./StaffRouteTable";
 import StaffNyscTable from "./StaffNyscTable";
+import StaffReservationModal from "./StaffReservationModal";
 
 export default function StickyHeadTable() {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
 
   const [image, setImage] = useState("");
-
+  const [reservation, setReservation] = useState([]);
+  const [reservationModal, setReservationModal] = useState(false);
   const [routeData, setRouteData] = useState({
     company: user.company._id,
     state: {
@@ -309,7 +311,11 @@ export default function StickyHeadTable() {
 
       {user.company.routes.length > 0 && (
         <div className="mx-auto">
-          <StaffRouteTable />
+          <StaffRouteTable
+            reservation={reservation}
+            setReservation={setReservation}
+            setReservationModal={setReservationModal}
+          />
         </div>
       )}
       <div className="my-7 max-w-7xl ">
@@ -464,7 +470,8 @@ export default function StickyHeadTable() {
               className="text-black shadow-sm px-2 py border"
             >
               <option value="">Please Select</option>
-              <option value="once">Once</option>
+              <option value="none">None</option>
+              <option value="everyday">Everyday</option>
               <option value="once a week">Once a week</option>
               <option value="once a month">Once a month</option>
             </select>
@@ -480,9 +487,13 @@ export default function StickyHeadTable() {
         </form>
       </div>
 
-      {user.company.routes.length > 0 && (
+      {user.company.nyscRoutes.length > 0 && (
         <div className="mx-auto">
-          <StaffNyscTable />
+          <StaffNyscTable
+            reservation={reservation}
+            setReservation={setReservation}
+            setReservationModal={setReservationModal}
+          />
         </div>
       )}
       <div className="my-7 max-w-7xl ">
@@ -644,7 +655,8 @@ export default function StickyHeadTable() {
               className="text-black shadow-sm px-2 py border"
             >
               <option value="">Please Select</option>
-              <option value="once">Once</option>
+              <option value="none">None</option>
+              <option value="everyday">Everyday</option>
               <option value="once a week">Once a week</option>
               <option value="once a month">Once a month</option>
             </select>
@@ -659,6 +671,12 @@ export default function StickyHeadTable() {
           </div>
         </form>
       </div>
+      {reservationModal && (
+        <StaffReservationModal
+          reservation={reservation}
+          setReservationModal={setReservationModal}
+        />
+      )}
     </div>
   );
 }
