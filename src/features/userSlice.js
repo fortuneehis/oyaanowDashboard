@@ -93,6 +93,7 @@ export const addNyscRoute = createAsyncThunk(
   async (nyscRouteData) => {
     try {
       const res = await API.post("/company/addnyscroute", nyscRouteData);
+      console.log(res);
       return res.data.data;
     } catch (error) {
       alert(error.response.data.message);

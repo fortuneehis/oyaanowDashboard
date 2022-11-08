@@ -13,6 +13,7 @@ export const addBus = createAsyncThunk(
     try {
       const { company } = busData;
       const res = await API.post("/company/addbus", busData);
+      console.log(res);
       dispatch(getCompany());
     } catch (error) {
       alert(error.response.data.message);
@@ -93,34 +94,34 @@ export const removeRoute = createAsyncThunk(
   }
 );
 
-export const addNyscRoute = createAsyncThunk(
-  "company/addNyscRoute",
-  async (nyscRouteData, { dispatch }) => {
-    try {
-      console.log(nyscRouteData);
-      const res = await API.post("/company/addnyscroute", nyscRouteData);
-      dispatch(getCompany());
-    } catch (error) {
-      console.log(error.response);
-      alert(error.response.data.message);
-    }
-  }
-);
+// export const addNysccRoute = createAsyncThunk(
+//   "company/addNyscRoute",
+//   async (nyscRouteData, { dispatch }) => {
+//     try {
+//       console.log(nyscRouteData);
+//       // const res = await API.post("/company/addnyscroute", nyscRouteData);
+//       dispatch(getCompany());
+//     } catch (error) {
+//       console.log(error.response);
+//       alert(error.response.data.message);
+//     }
+//   }
+// );
 
-export const removeNyscRoute = createAsyncThunk(
-  "company/removeNyscRoute",
-  async (nyscRouteData, { dispatch }) => {
-    try {
-      const { nyscRouteId, companyId } = nyscRouteData;
-      const res = await API.patch(`/company/removenyscroute/${nyscRouteId}`, {
-        company: `${companyId}`,
-      });
-      dispatch(getCompany());
-    } catch (error) {
-      alert(error.response.data.message);
-    }
-  }
-);
+// export const removeNyscRoute = createAsyncThunk(
+//   "company/removeNyscRoute",
+//   async (nyscRouteData, { dispatch }) => {
+//     try {
+//       const { nyscRouteId, companyId } = nyscRouteData;
+//       const res = await API.patch(`/company/removenyscroute/${nyscRouteId}`, {
+//         company: `${companyId}`,
+//       });
+//       dispatch(getCompany());
+//     } catch (error) {
+//       alert(error.response.data.message);
+//     }
+//   }
+// );
 
 const initialState = {
   company: [],

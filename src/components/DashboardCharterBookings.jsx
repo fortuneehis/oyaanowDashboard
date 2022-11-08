@@ -64,7 +64,7 @@ export default function StickyHeadTable() {
                   Phone Number
                 </TableCell>
                 <TableCell className="text-center bg-black text-white">
-                  Seat Number
+                  Number of Bus(es)
                 </TableCell>
                 <TableCell className="text-center bg-black text-white">
                   Departure Date
@@ -115,7 +115,7 @@ export default function StickyHeadTable() {
                       {row.phoneNumber}
                     </TableCell>
                     <TableCell className="text-center">
-                      {row.seatNumber}
+                      {row.busNumber}
                     </TableCell>
 
                     <TableCell className="text-center">

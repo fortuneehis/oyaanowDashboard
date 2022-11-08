@@ -32,6 +32,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { resetStaffState } from "../features/staffSlice";
 import { resetUser } from "../features/userSlice";
 import { resetCompanyState } from "../features/companySlice";
+import { resetBookingsState } from "../features/bookings/bookingsSlice";
 
 const drawerWidth = 240;
 
@@ -256,6 +257,7 @@ export default function PersistentDrawerLeft() {
               dispatch(resetUser());
               dispatch(resetStaffState());
               dispatch(resetCompanyState());
+              dispatch(resetBookingsState());
             }}
             disablePadding
           >

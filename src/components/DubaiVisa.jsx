@@ -8,7 +8,6 @@ import { useSelector, useDispatch } from "react-redux";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { getDubaiVisa } from "../features/bookings/bookingsSlice";
-import { BiDownload } from "react-icons/bi";
 import DubaiVisaModal from "./DubaiVisaModal";
 
 export default function StickyHeadTable() {
@@ -26,13 +25,6 @@ export default function StickyHeadTable() {
   var yyyy = today.getFullYear();
 
   today = yyyy + "-" + mm + "-" + dd;
-
-  useEffect(() => {});
-
-  useEffect(() => {
-    console.log(today);
-    console.log(2);
-  }, [search]);
 
   useEffect(() => {
     dispatch(getDubaiVisa());
@@ -79,6 +71,9 @@ export default function StickyHeadTable() {
                 </TableCell>
                 <TableCell className="text-center bg-black text-white">
                   Ticket Id
+                </TableCell>
+                <TableCell className="text-center bg-black text-white">
+                  Visa Type
                 </TableCell>
                 <TableCell className="text-center bg-black text-white">
                   Nationality
@@ -136,6 +131,15 @@ export default function StickyHeadTable() {
                   Number of Travellers
                 </TableCell>
                 <TableCell className="text-center bg-black text-white">
+                  UAE Contact
+                </TableCell>
+                <TableCell className="text-center bg-black text-white">
+                  Booking Id
+                </TableCell>
+                <TableCell className="text-center bg-black text-white">
+                  Recent Destination
+                </TableCell>
+                <TableCell className="text-center bg-black text-white">
                   Companion's Data Pages
                 </TableCell>
                 <TableCell className="text-center bg-black text-white">
@@ -143,6 +147,12 @@ export default function StickyHeadTable() {
                 </TableCell>
                 <TableCell className="text-center bg-black text-white">
                   Companion's Birth Certificate
+                </TableCell>
+                <TableCell className="text-center bg-black text-white">
+                  Companion's Marriage Cert
+                </TableCell>
+                <TableCell className="text-center bg-black text-white">
+                  Companion's Affidavit
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -181,6 +191,9 @@ export default function StickyHeadTable() {
                       {row.middlename}
                     </TableCell>
                     <TableCell className="text-center">{row._id}</TableCell>
+                    <TableCell className="text-center">
+                      {row.visaType}
+                    </TableCell>
                     <TableCell className="text-center">
                       {row.nationality}
                     </TableCell>
@@ -236,6 +249,15 @@ export default function StickyHeadTable() {
                       {row.travellingInfo.travellersNo}
                     </TableCell>
                     <TableCell className="text-center">
+                      {row.travellingInfo.uaeContact}
+                    </TableCell>
+                    <TableCell className="text-center">
+                      {row.travellingInfo.bookingId}
+                    </TableCell>
+                    <TableCell className="text-center">
+                      {row.travellingInfo.recentDestination}
+                    </TableCell>
+                    <TableCell className="text-center">
                       <button
                         onClick={() => {
                           setDubaiImage(row.travellingCompanionInfo.dataPages);
@@ -277,6 +299,24 @@ export default function StickyHeadTable() {
                       >
                         Click to View
                       </button>
+                    </TableCell>
+                    <TableCell className="text-center">
+                      {/* <a
+                        className="border px-2 transition hover:scale-105 active:scale-90"
+                        href={row.travellingCompanionInfo.marriageCertificate}
+                        download={`${row.firstname} travelCompanionmarriageCert`}
+                      >
+                        Download
+                      </a> */}
+                    </TableCell>
+                    <TableCell className="text-center">
+                      {/* <a
+                        className="border px-2 transition hover:scale-105 active:scale-90"
+                        href={row.travellingCompanionInfo.affidavit}
+                        download={`${row.firstname} affidavit`}
+                      >
+                        Download
+                      </a> */}
                     </TableCell>
                   </TableRow>
                 ))}

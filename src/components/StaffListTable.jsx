@@ -63,7 +63,7 @@ export default function StaffListTable() {
               <TableBody>
                 {staff
                   ? staff.map((row) => (
-                      <TableRow>
+                      <TableRow key={row._id}>
                         <TableCell>{row.firstname}</TableCell>
                         <TableCell>{row.lastname}</TableCell>
                         {row.roles.staff && !row.roles.admin ? (

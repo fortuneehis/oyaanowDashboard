@@ -22,8 +22,6 @@ export default function RouteTable({
   const [companyId, setCompanyId] = useState("");
   const [staffNyscModal, setStaffNyscModal] = useState(false);
 
-  const dispatch = useDispatch();
-
   return (
     <div>
       <div className="my-7 max-w-7xl">
@@ -87,12 +85,15 @@ export default function RouteTable({
                 <TableCell className="bg-black text-white text-center">
                   Reservations
                 </TableCell>
+                <TableCell className="bg-black text-white text-center">
+                  Added By
+                </TableCell>
                 <TableCell className="bg-black  text-center">Delete</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {user.company.nyscRoutes.map((row) => (
-                <TableRow>
+                <TableRow key={row._id}>
                   <TableCell className="text-center">{row.state.to}</TableCell>
                   <TableCell>{row.state.from}</TableCell>
                   <TableCell className="text-center">
@@ -132,6 +133,9 @@ export default function RouteTable({
                     >
                       Click to View
                     </button>
+                  </TableCell>
+                  <TableCell className="text-center">
+                    {row.addedBy?.name}
                   </TableCell>
                   <TableCell
                     onClick={() => {

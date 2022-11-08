@@ -28,153 +28,185 @@ export default function StickyHeadTable() {
 
   const { staffCustomers } = useSelector((state) => state.bookings);
   return (
-    <div>
-      <div className="w-full flex  items-center justify-between px-4">
-        <input
-          value={search}
-          onChange={(e) => {
-            setSearch(e.target.value);
-          }}
-          className="my-4 border py px-4 focus:outline-none"
-          type="text"
-          placeholder="Search Bookings"
-        />
+    <>
+      <div>
+        <div className="w-full flex  items-center justify-between px-4">
+          <input
+            value={search}
+            onChange={(e) => {
+              setSearch(e.target.value);
+            }}
+            className="my-4 border py px-4 focus:outline-none"
+            type="text"
+            placeholder="Search Bookings"
+          />
 
-        <select
-          onChange={(e) => {
-            setTodayValue(e.target.value);
+          <select
+            onChange={(e) => {
+              setTodayValue(e.target.value);
+            }}
+            className="focus:outline-none w-2/6 border px-2"
+          >
+            <option value="">Default</option>
+            <option value={today}>Today</option>
+          </select>
+        </div>
+        <Paper
+          sx={{
+            width: "100%",
+            overflow: "hidden",
           }}
-          className="focus:outline-none w-2/6 border px-2"
         >
-          <option value="">Default</option>
-          <option value={today}>Today</option>
-        </select>
+          <h3 className="text-lg font-bold mx-auto">Customer Bookings</h3>
+          <TableContainer sx={{ maxHeight: 440 }}>
+            <Table stickyHeader aria-label="sticky table">
+              <TableHead>
+                <TableRow>
+                  <TableCell className="text-center bg-black text-white">
+                    Name
+                  </TableCell>
+                  <TableCell className="text-center bg-black text-white">
+                    Email
+                  </TableCell>
+                  <TableCell className="text-center bg-black text-white">
+                    Phone Number
+                  </TableCell>
+                  <TableCell className="text-center bg-black text-white">
+                    State To
+                  </TableCell>
+                  <TableCell className="text-center bg-black text-white">
+                    State From
+                  </TableCell>
+                  <TableCell className="text-center bg-black text-white">
+                    Ticket Id
+                  </TableCell>
+                  <TableCell className="text-center bg-black text-white">
+                    Terminal To
+                  </TableCell>
+                  <TableCell className="text-center bg-black text-white">
+                    Terminal From
+                  </TableCell>
+                  <TableCell className="text-center bg-black text-white">
+                    Departure Date
+                  </TableCell>
+                  <TableCell className="text-center bg-black text-white">
+                    CreatedAt
+                  </TableCell>
+                  <TableCell className="text-center bg-black text-white">
+                    Gender
+                  </TableCell>
+                  <TableCell className="text-center bg-black text-white">
+                    Bus
+                  </TableCell>
+                  <TableCell className="text-center bg-black text-white">
+                    Seat
+                  </TableCell>
+                  <TableCell className="text-center bg-black text-white">
+                    Paid
+                  </TableCell>
+                  <TableCell className="text-center bg-black text-white">
+                    Time
+                  </TableCell>
+                  <TableCell className="text-center bg-black text-white">
+                    Transaction Reference
+                  </TableCell>
+                  <TableCell className="text-center bg-black text-white">
+                    Price
+                  </TableCell>
+                  <TableCell className="text-center bg-black text-white">
+                    Company
+                  </TableCell>
+                  <TableCell className="text-center bg-black text-white">
+                    Kin Name
+                  </TableCell>
+                  <TableCell className="text-center bg-black text-white">
+                    Kin Email
+                  </TableCell>
+                  <TableCell className="text-center bg-black text-white">
+                    Kin PhoneNumber
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {staffCustomers
+                  .filter((customer) => {
+                    return search.toLowerCase() === ""
+                      ? customer
+                      : customer._id.includes(search);
+                  })
+                  .filter((customer) => {
+                    const bookingDate = customer.date;
+                    var todays = new Date(bookingDate);
+                    var dd = String(todays.getDate()).padStart(2, "0");
+                    var mm = String(todays.getMonth() + 1).padStart(2, "0");
+                    var yyyy = todays.getFullYear();
+
+                    todays = yyyy + "-" + mm + "-" + dd;
+                    console.log(todays);
+                    console.log(todayValue);
+                    if (todayValue === "") {
+                      return customer;
+                    } else if (todayValue === todays) {
+                      return customer;
+                    }
+                  })
+                  .map((row) => (
+                    <TableRow hover key={row._id}>
+                      <TableCell className="text-center font-bold">
+                        {row.name}
+                      </TableCell>
+                      <TableCell className="text-center">{row.email}</TableCell>
+                      <TableCell className="text-center">
+                        {row.phoneNumber}
+                      </TableCell>
+
+                      <TableCell className="text-center">
+                        {row.state.to}
+                      </TableCell>
+                      <TableCell className="text-center">
+                        {row.state.from}
+                      </TableCell>
+                      <TableCell className="text-center">{row._id}</TableCell>
+                      <TableCell className="text-center">
+                        {row.terminal.to}
+                      </TableCell>
+                      <TableCell className="text-center">
+                        {row.terminal.from}
+                      </TableCell>
+                      <TableCell className="text-center">{row.date}</TableCell>
+                      <TableCell className="text-center">
+                        {row.createdAt}
+                      </TableCell>
+                      <TableCell className="text-center">
+                        {row.gender}
+                      </TableCell>
+                      <TableCell className="text-center">{row.bus}</TableCell>
+                      <TableCell className="text-center">{row.seat}</TableCell>
+                      <TableCell className="text-center">{row.paid}</TableCell>
+                      <TableCell className="text-center">{row.time}</TableCell>
+                      <TableCell className="text-center">
+                        {row.transactionRef}
+                      </TableCell>
+                      <TableCell className="text-center">{row.price}</TableCell>
+                      <TableCell className="text-center">
+                        {row.company}
+                      </TableCell>
+                      <TableCell className="text-center">
+                        {row.kin.name}
+                      </TableCell>
+                      <TableCell className="text-center">
+                        {row.kin.email}
+                      </TableCell>
+                      <TableCell className="text-center">
+                        {row.kin.phoneNumber}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Paper>
       </div>
-      <Paper
-        sx={{
-          width: "100%",
-          overflow: "hidden",
-        }}
-      >
-        <h3 className="text-lg font-bold mx-auto">Customer Bookings</h3>
-        <TableContainer sx={{ maxHeight: 440 }}>
-          <Table stickyHeader aria-label="sticky table">
-            <TableHead>
-              <TableRow>
-                <TableCell className="text-center bg-black text-white">
-                  Name
-                </TableCell>
-                <TableCell className="text-center bg-black text-white">
-                  Email
-                </TableCell>
-                <TableCell className="text-center bg-black text-white">
-                  Phone Number
-                </TableCell>
-                <TableCell className="text-center bg-black text-white">
-                  State To
-                </TableCell>
-                <TableCell className="text-center bg-black text-white">
-                  State From
-                </TableCell>
-                <TableCell className="text-center bg-black text-white">
-                  Ticket Id
-                </TableCell>
-                <TableCell className="text-center bg-black text-white">
-                  Terminal To
-                </TableCell>
-                <TableCell className="text-center bg-black text-white">
-                  Terminal From
-                </TableCell>
-                <TableCell className="text-center bg-black text-white">
-                  Departure Date
-                </TableCell>
-                <TableCell className="text-center bg-black text-white">
-                  CreatedAt
-                </TableCell>
-                <TableCell className="text-center bg-black text-white">
-                  Gender
-                </TableCell>
-                <TableCell className="text-center bg-black text-white">
-                  Bus
-                </TableCell>
-                <TableCell className="text-center bg-black text-white">
-                  Seats
-                </TableCell>
-                <TableCell className="text-center bg-black text-white">
-                  Price
-                </TableCell>
-                <TableCell className="text-center bg-black text-white">
-                  Company
-                </TableCell>
-                <TableCell className="text-center bg-black text-white">
-                  Kin
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {staffCustomers
-                .filter((customer) => {
-                  return search.toLowerCase() === ""
-                    ? customer
-                    : customer._id.includes(search);
-                })
-                .filter((customer) => {
-                  const bookingDate = customer.date;
-                  var todays = new Date(bookingDate);
-                  var dd = String(todays.getDate()).padStart(2, "0");
-                  var mm = String(todays.getMonth() + 1).padStart(2, "0");
-                  var yyyy = todays.getFullYear();
-
-                  todays = yyyy + "-" + mm + "-" + dd;
-                  console.log(todays);
-                  console.log(todayValue);
-                  if (todayValue === "") {
-                    return customer;
-                  } else if (todayValue === todays) {
-                    return customer;
-                  }
-                })
-                .map((row) => (
-                  <TableRow hover key={row._id}>
-                    <TableCell className="text-center font-bold">
-                      {row.name}
-                    </TableCell>
-                    <TableCell className="text-center">{row.email}</TableCell>
-                    <TableCell className="text-center">
-                      {row.phoneNumber}
-                    </TableCell>
-
-                    <TableCell className="text-center">
-                      {row.state.to}
-                    </TableCell>
-                    <TableCell className="text-center">
-                      {row.state.from}
-                    </TableCell>
-                    <TableCell className="text-center">{row._id}</TableCell>
-                    <TableCell className="text-center">
-                      {row.terminal.to}
-                    </TableCell>
-                    <TableCell className="text-center">
-                      {row.terminal.from}
-                    </TableCell>
-                    <TableCell className="text-center">{row.date}</TableCell>
-                    <TableCell className="text-center">
-                      {row.createdAt}
-                    </TableCell>
-                    <TableCell className="text-center">{row.gender}</TableCell>
-                    <TableCell className="text-center">{row.bus}</TableCell>
-                    <TableCell className="text-center">{row.seats}</TableCell>
-                    <TableCell className="text-center">{row.price}</TableCell>
-                    <TableCell className="text-center">{row.company}</TableCell>
-                    <TableCell className="text-center">
-                      {row.kin.firstname}
-                    </TableCell>
-                  </TableRow>
-                ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Paper>
-    </div>
+    </>
   );
 }

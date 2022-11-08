@@ -38,15 +38,18 @@ export default function CompanyTable({
                 <TableRow>
                   <TableCell className="bg-black text-white">Name</TableCell>
                   <TableCell className="bg-black text-white">Email</TableCell>
+                  <TableCell className="bg-black text-white">
+                    Last Update By
+                  </TableCell>
                   <TableCell className="bg-black text-black">Delete</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {company.map((row) => (
-                  <TableRow>
+                  <TableRow key={row._id}>
                     <TableCell className="font-bold">{row.name}</TableCell>
                     <TableCell>{row.email}</TableCell>
-
+                    <TableCell>{row.lastUpdatedBy.name}</TableCell>
                     <TableCell
                       onClick={() => {
                         setCompanyModal(true);

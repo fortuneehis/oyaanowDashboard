@@ -19,6 +19,8 @@ export default function StickyHeadTable() {
   const [image, setImage] = useState("");
   const [reservation, setReservation] = useState([]);
   const [reservationModal, setReservationModal] = useState(false);
+  const [routeTime, setRouteTime] = useState("");
+  const [nyscRouteTime, setNyscRouteTime] = useState("");
   const [routeData, setRouteData] = useState({
     company: user.company._id,
     state: {
@@ -41,9 +43,6 @@ export default function StickyHeadTable() {
   });
 
   const handleAddBus = (e) => {
-    const newBus = {
-      id: e.target.value,
-    };
     setRouteData({
       ...routeData,
       buses: [
@@ -64,7 +63,6 @@ export default function StickyHeadTable() {
         from: "",
         to: "",
       },
-      departureTimes: [],
       departureDate: "",
       recurring: "",
     });
@@ -100,16 +98,12 @@ export default function StickyHeadTable() {
         from: "",
         to: "",
       },
-      departureTimes: [],
       departureDate: "",
       recurring: "",
     });
   };
 
   const handleAddNyscBus = (e) => {
-    const newBus = {
-      id: e.target.value,
-    };
     setNyscRouteData({
       ...nyscRouteData,
       buses: [
@@ -120,6 +114,36 @@ export default function StickyHeadTable() {
       ],
     });
   };
+
+  useEffect(() => {
+    const timeString12hr = new Date(
+      "1970-01-01T" + routeTime + "Z"
+    ).toLocaleTimeString("en-US", {
+      timeZone: "UTC",
+      hour12: true,
+      hour: "numeric",
+      minute: "numeric",
+    });
+    setRouteData({
+      ...routeData,
+      departureTimes: [timeString12hr],
+    });
+  }, [routeTime]);
+
+  useEffect(() => {
+    const timeString12hr = new Date(
+      "1970-01-01T" + nyscRouteTime + "Z"
+    ).toLocaleTimeString("en-US", {
+      timeZone: "UTC",
+      hour12: true,
+      hour: "numeric",
+      minute: "numeric",
+    });
+    setNyscRouteData({
+      ...nyscRouteData,
+      departureTimes: [timeString12hr],
+    });
+  }, [nyscRouteTime]);
 
   useEffect(() => {
     if (image) {
@@ -168,7 +192,8 @@ export default function StickyHeadTable() {
 
     setTerminalData({
       company: user.company._id,
-      destination: "",
+      location: "",
+      address: "",
       landmark: " ",
     });
   };
@@ -432,12 +457,9 @@ export default function StickyHeadTable() {
           <div className="flex flex-col lg:flex-row  items-center justify-between">
             <label htmlFor="departureTimes">Departure Time</label>
             <input
-              value={routeData.departureTimes}
+              // value={routeData.departureTimes}
               onChange={(e) => {
-                setRouteData({
-                  ...routeData,
-                  departureTimes: [e.target.value],
-                });
+                setRouteTime(e.target.value);
               }}
               className="text-black border px-2 py-1 outline-none shadow-sm rounded-sm"
               type="time"
@@ -611,12 +633,8 @@ export default function StickyHeadTable() {
           <div className="flex flex-col lg:flex-row  items-center justify-between">
             <label htmlFor="departureTimes">Departure Time</label>
             <input
-              value={nyscRouteData.departureTimes}
               onChange={(e) => {
-                setNyscRouteData({
-                  ...nyscRouteData,
-                  departureTimes: [e.target.value],
-                });
+                setNyscRouteTime(e.target.value);
               }}
               className="text-black border px-2 py-1 outline-none shadow-sm rounded-sm"
               type="time"

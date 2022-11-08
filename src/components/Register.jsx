@@ -162,7 +162,7 @@ const Register = () => {
       </form>
       <span
         onClick={() => {
-          navigate("/dashboard/profile");
+          navigate("/dashboard/admin");
         }}
         className="flex space-x-1 items-center border px-2 py-1 hover:scale-105 active:scale-90 transition"
       >

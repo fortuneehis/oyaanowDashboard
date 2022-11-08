@@ -4,12 +4,9 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { getCompany } from "../features/companySlice";
-import {
-  addBus,
-  addTerminal,
-  addRoute,
-  addNyscRoute,
-} from "../features/companySlice";
+import { addBus, addTerminal, addRoute } from "../features/companySlice";
+import { API } from "../hooks/axiosInterceptor";
+// import { addNysccRoute } from "../features/companySlice";
 import AdminTerminalTable from "./AdminTerminalTable";
 import AdminBusTable from "./AdminBusTable";
 import AdminRouteTable from "./AdminRouteTable";
@@ -22,6 +19,8 @@ export default function Company() {
 
   const [reservation, setReservation] = useState([]);
   const [reservationModal, setReservationModal] = useState(false);
+  const [routeTime, setRouteTime] = useState("");
+  const [nyscRouteTime, setNyscRouteTime] = useState("");
 
   let routeList = [];
   company.forEach((comp) => {
@@ -124,7 +123,35 @@ export default function Company() {
     recurring: "",
   });
 
-  function addRouteTime(time) {}
+  useEffect(() => {
+    const timeString12hr = new Date(
+      "1970-01-01T" + routeTime + "Z"
+    ).toLocaleTimeString("en-US", {
+      timeZone: "UTC",
+      hour12: true,
+      hour: "numeric",
+      minute: "numeric",
+    });
+    setRouteData({
+      ...routeData,
+      departureTimes: [timeString12hr],
+    });
+  }, [routeTime]);
+
+  useEffect(() => {
+    const timeString12hr = new Date(
+      "1970-01-01T" + nyscRouteTime + "Z"
+    ).toLocaleTimeString("en-US", {
+      timeZone: "UTC",
+      hour12: true,
+      hour: "numeric",
+      minute: "numeric",
+    });
+    setNyscRouteData({
+      ...nyscRouteData,
+      departureTimes: [timeString12hr],
+    });
+  }, [nyscRouteTime]);
 
   const [nyscRouteData, setNyscRouteData] = useState({
     company: "",
@@ -148,9 +175,6 @@ export default function Company() {
   });
 
   const handleAddBus = (e) => {
-    const newBus = {
-      id: e.target.value,
-    };
     setRouteData({
       ...routeData,
       buses: [
@@ -163,9 +187,6 @@ export default function Company() {
   };
 
   const handleAddNyscBus = (e) => {
-    const newBus = {
-      id: e.target.value,
-    };
     setNyscRouteData({
       ...nyscRouteData,
       buses: [
@@ -188,26 +209,34 @@ export default function Company() {
         from: "",
         to: "",
       },
-      departureTimes: [],
+
       departureDate: "",
       recurring: "",
     });
   };
 
-  const addTheNyscRoute = (e) => {
+  const addTheNyscRoute = async (e) => {
     e.preventDefault();
-    dispatch(addNyscRoute(nyscRouteData));
-    setNyscRouteData({
-      ...nyscRouteData,
-      company: "",
-      state: {
-        from: "",
-        to: "",
-      },
-      departureTimes: [],
-      departureDate: "",
-      recurring: "",
-    });
+    console.log(nyscRouteData);
+
+    try {
+      console.log(nyscRouteData);
+      const res = await API.post("/company/addnyscroute", nyscRouteData);
+      dispatch(getCompany());
+      setNyscRouteData({
+        ...nyscRouteData,
+        company: "",
+        state: {
+          from: "",
+          to: "",
+        },
+
+        departureDate: "",
+        recurring: "",
+      });
+    } catch (error) {
+      alert(error.response.data.message);
+    }
   };
 
   const [terminalData, setTerminalData] = useState({
@@ -604,13 +633,9 @@ export default function Company() {
           <div className="flex flex-col lg:flex-row  items-center justify-between">
             <label htmlFor="departureTimes">Departure Time</label>
             <input
-              value={routeData.departureTimes}
+              // value={routeData.departureTimes}
               onChange={(e) => {
-                // addRouteTime(e.target.value);
-                setRouteData({
-                  ...routeData,
-                  departureTimes: [e.target.value],
-                });
+                setRouteTime(e.target.value);
               }}
               className="text-black border px-2 py-1 outline-none shadow-sm rounded-sm"
               type="time"
@@ -805,12 +830,8 @@ export default function Company() {
           <div className="flex flex-col lg:flex-row  items-center justify-between">
             <label htmlFor="departureTimes">Departure Time</label>
             <input
-              value={nyscRouteData.departureTimes}
               onChange={(e) => {
-                setNyscRouteData({
-                  ...nyscRouteData,
-                  departureTimes: [e.target.value],
-                });
+                setNyscRouteTime(e.target.value);
               }}
               className="text-black border px-2 py-1 outline-none shadow-sm rounded-sm"
               type="time"

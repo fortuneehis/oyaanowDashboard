@@ -77,12 +77,15 @@ export default function RouteTable({
                 <TableCell className="bg-black text-white text-center">
                   Reservations
                 </TableCell>
+                <TableCell className="bg-black text-white text-center">
+                  Added By
+                </TableCell>
                 <TableCell className="bg-black  text-center">Delete</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {user.company.routes.map((row) => (
-                <TableRow hover>
+                <TableRow key={row._id} hover>
                   <TableCell className="text-center">{row.state.to}</TableCell>
                   <TableCell>{row.state.from}</TableCell>
                   <TableCell className="text-center">
@@ -119,6 +122,9 @@ export default function RouteTable({
                     >
                       Click to View
                     </button>
+                  </TableCell>
+                  <TableCell className="text-center">
+                    {row.addedBy?.name}
                   </TableCell>
                   <TableCell
                     onClick={() => {

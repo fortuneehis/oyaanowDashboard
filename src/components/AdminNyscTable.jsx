@@ -33,12 +33,7 @@ export default function RouteTable({
 
   return (
     <div>
-      <Paper
-        sx={{
-          width: "100%",
-          overflow: "hidden",
-        }}
-      >
+      <Paper className="w-4/4 lg:w-4/4 my-10 mx-auto">
         {nyscRoutes.length > 1 ? (
           <h2 className="font-bold text-center">{companyName} Nysc Routes</h2>
         ) : (
@@ -85,12 +80,15 @@ export default function RouteTable({
                 <TableCell className="bg-black text-white text-center">
                   Reservations
                 </TableCell>
+                <TableCell className="bg-black text-white text-center">
+                  Added By
+                </TableCell>
                 <TableCell className="bg-black  text-center">Delete</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {nyscRoutes.map((row) => (
-                <TableRow>
+                <TableRow key={row._id} hover>
                   <TableCell className="text-center">{row.state.to}</TableCell>
                   <TableCell>{row.state.from}</TableCell>
                   <TableCell className="text-center">
@@ -130,6 +128,9 @@ export default function RouteTable({
                     >
                       Click to View
                     </button>
+                  </TableCell>
+                  <TableCell className="text-center">
+                    {row.addedBy?.name}
                   </TableCell>
                   <TableCell
                     onClick={() => {

@@ -1,7 +1,8 @@
 import React from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { useDispatch } from "react-redux";
-import { removeNyscRoute } from "../features/companySlice";
+import { API } from "../hooks/axiosInterceptor";
+import { getCompany } from "../features/companySlice";
 
 const AdminNyscModal = ({
   setAdminNyscModal,
@@ -11,14 +12,19 @@ const AdminNyscModal = ({
   setNyscRouteId,
 }) => {
   const dispatch = useDispatch();
-  const removeTheNyscRoute = () => {
-    console.log(companyId);
-    dispatch(
-      removeNyscRoute({ nyscRouteId: nyscRouteId, companyId: companyId })
-    );
+  const removeTheNyscRoute = async () => {
+    setAdminNyscModal(false);
+    try {
+      const res = await API.patch(`/company/removenyscroute/${nyscRouteId}`, {
+        company: `${companyId}`,
+      });
+
+      dispatch(getCompany());
+    } catch (error) {
+      alert(error.response.data.message);
+    }
     setCompanyId("");
     setNyscRouteId("");
-    setAdminNyscModal(false);
   };
   return (
     <div className="h-screen z-30 w-screen top-0 left-0 bg-black opacity-95 fixed flex justify-center items-center">

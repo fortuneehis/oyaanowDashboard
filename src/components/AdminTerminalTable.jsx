@@ -38,15 +38,17 @@ export default function TerminalTable({ terminals, id, companyName }) {
                 <TableCell className="bg-black text-white">Location</TableCell>
                 <TableCell className="bg-black text-white">Address</TableCell>
                 <TableCell className="bg-black text-white">Landmark</TableCell>
+                <TableCell className="bg-black text-white">Added By</TableCell>
                 <TableCell className="bg-black ">Delete</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {terminals.map((row) => (
-                <TableRow>
+                <TableRow key={row._id} hover>
                   <TableCell>{row.location}</TableCell>
                   <TableCell>{row.address}</TableCell>
                   <TableCell>{row.landmark}</TableCell>
+                  <TableCell>{row.addedBy?.name}</TableCell>
                   <TableCell
                     onClick={() => {
                       setTerminalId(row._id);

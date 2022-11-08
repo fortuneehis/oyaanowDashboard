@@ -93,8 +93,18 @@ export default function StickyHeadTable() {
                 <TableCell className="text-center bg-black text-white">
                   Bus
                 </TableCell>
+
                 <TableCell className="text-center bg-black text-white">
-                  Seats
+                  Seat
+                </TableCell>
+                <TableCell className="text-center bg-black text-white">
+                  Paid
+                </TableCell>
+                <TableCell className="text-center bg-black text-white">
+                  Time
+                </TableCell>
+                <TableCell className="text-center bg-black text-white">
+                  Transaction Reference
                 </TableCell>
                 <TableCell className="text-center bg-black text-white">
                   Price
@@ -103,7 +113,13 @@ export default function StickyHeadTable() {
                   Company
                 </TableCell>
                 <TableCell className="text-center bg-black text-white">
-                  Kin
+                  Kin Name
+                </TableCell>
+                <TableCell className="text-center bg-black text-white">
+                  Kin Email
+                </TableCell>
+                <TableCell className="text-center bg-black text-white">
+                  Kin PhoneNumber
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -159,11 +175,22 @@ export default function StickyHeadTable() {
                     </TableCell>
                     <TableCell className="text-center">{row.gender}</TableCell>
                     <TableCell className="text-center">{row.bus}</TableCell>
-                    <TableCell className="text-center">{row.seats}</TableCell>
+                    <TableCell className="text-center">{row.seat}</TableCell>
+                    <TableCell className="text-center">{row.paid}</TableCell>
+                    <TableCell className="text-center">{row.time}</TableCell>
+                    <TableCell className="text-center">
+                      {row.transactionRef}
+                    </TableCell>
                     <TableCell className="text-center">{row.price}</TableCell>
                     <TableCell className="text-center">{row.company}</TableCell>
                     <TableCell className="text-center">
-                      {row.kin.firstname}
+                      {row.kin.name}
+                    </TableCell>
+                    <TableCell className="text-center">
+                      {row.kin.email}
+                    </TableCell>
+                    <TableCell className="text-center">
+                      {row.kin.phoneNumber}
                     </TableCell>
                   </TableRow>
                 ))}

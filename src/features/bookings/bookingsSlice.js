@@ -49,6 +49,11 @@ export const getDubaiVisa = createAsyncThunk("bookings/dubaivisa", async () => {
 const bookingsSlice = createSlice({
   name: "bookings",
   initialState,
+  reducers: {
+    resetBookingsState: (state) => {
+      Object.assign(state, initialState);
+    },
+  },
   extraReducers: {
     [getCustomers.pending]: (state) => {
       return {
@@ -131,6 +136,6 @@ const bookingsSlice = createSlice({
 
 const { reducer, actions } = bookingsSlice;
 
-// export const { getuserPending, getuserSuccess, getuserFailed } = actions;
+export const { resetBookingsState } = actions;
 
 export default reducer;
