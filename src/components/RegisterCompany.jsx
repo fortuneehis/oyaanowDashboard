@@ -18,12 +18,12 @@ const Register = () => {
     if (image) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setCompanyData({ ...companyData, Logo: reader.result });
+        setCompanyData({ ...companyData, logo: reader.result });
       };
 
       reader.readAsDataURL(image);
     } else {
-      setCompanyData({ ...companyData, Logo: "" });
+      setCompanyData({ ...companyData, logo: "" });
     }
   }, [image]);
 
@@ -38,6 +38,8 @@ const Register = () => {
 
   const register = (e) => {
     e.preventDefault();
+    console.log(companyData);
+    dispatch(registerCompany(companyData));
     setCompanyData({
       ...companyData,
       name: "",
@@ -46,8 +48,6 @@ const Register = () => {
       bank: "",
       accountNumber: "",
     });
-    console.log(companyData);
-    dispatch(registerCompany(companyData));
   };
 
   return (
@@ -60,14 +60,18 @@ const Register = () => {
         <div className="flex flex-col">
           <input
             className="border border-black focus:outline-none rounded-sm py-2 px-4 my-3"
+            value={companyData.name}
             onChange={(e) => {
               setCompanyData({ ...companyData, name: e.target.value });
             }}
             type="text"
             placeholder="Name"
           />
+
           <input
-            className="border border-black  focus:outline-none rounded-sm py-2 px-4 my-3"
+            className="border border-black focus:outline-none rounded-sm py-2 px-4
+          my-3"
+            value={companyData.email}
             onChange={(e) => {
               setCompanyData({ ...companyData, email: e.target.value });
             }}
@@ -76,6 +80,7 @@ const Register = () => {
           />
           <input
             className="border border-black  focus:outline-none rounded-sm py-2 px-4 my-3"
+            value={companyData.phoneNumber}
             onChange={(e) => {
               setCompanyData({ ...companyData, phoneNumber: e.target.value });
             }}
@@ -102,6 +107,7 @@ const Register = () => {
             placeholder="Logo"
           />
           <input
+            value={companyData.accountNumber}
             className="border border-black focus:outline-none rounded-sm py-2 px-4 my-3"
             onChange={(e) => {
               setCompanyData({ ...companyData, accountNumber: e.target.value });
@@ -110,6 +116,7 @@ const Register = () => {
             placeholder="Account Number"
           />
           <select
+            value={companyData.bank}
             onChange={(e) => {
               setCompanyData({ ...companyData, bank: e.target.value });
             }}

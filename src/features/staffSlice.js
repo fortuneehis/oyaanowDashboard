@@ -34,9 +34,10 @@ export const registerCompany = createAsyncThunk(
 
 export const removeCompany = createAsyncThunk(
   "staff/removeCompany",
-  async (id, { dispatch }) => {
+  async (companyId, { dispatch }) => {
     try {
-      const res = await API.delete(`company/admin/${id}`);
+      console.log(companyId);
+      const res = await API.delete(`company/admin/${companyId}`);
       dispatch(getCompanies());
     } catch (error) {
       alert(error.response.data.message);

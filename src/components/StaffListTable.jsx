@@ -6,11 +6,10 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import { useSelector } from "react-redux";
 import TableHead from "@mui/material/TableHead";
-import TablePagination from "@mui/material/TablePagination";
+
 import TableRow from "@mui/material/TableRow";
 import { useDispatch } from "react-redux";
-import { useEffect, useState } from "react";
-import { getCompanies, removeCompany } from "../features/staffSlice";
+import { useState } from "react";
 import StaffListModal from "./StaffListModal";
 
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -20,13 +19,6 @@ export default function StaffListTable() {
 
   const [staffModal, setStaffModal] = useState(false);
   const [staffId, setStaffId] = useState("");
-  const staffList = staff.filter((staff) => {
-    if (!staff.roles.superAdmin) {
-      return staff;
-    }
-  });
-
-  const dispatch = useDispatch();
 
   return (
     <div>
@@ -63,7 +55,7 @@ export default function StaffListTable() {
               <TableBody>
                 {staff
                   ? staff.map((row) => (
-                      <TableRow key={row._id}>
+                      <TableRow hover key={row._id}>
                         <TableCell>{row.firstname}</TableCell>
                         <TableCell>{row.lastname}</TableCell>
                         {row.roles.staff && !row.roles.admin ? (

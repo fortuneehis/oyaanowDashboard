@@ -10,8 +10,6 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
-import { getCompanies, removeCompany } from "../features/staffSlice";
-
 import DeleteIcon from "@mui/icons-material/Delete";
 
 export default function CompanyTable({
@@ -20,13 +18,13 @@ export default function CompanyTable({
   setCompanyModal,
 }) {
   const { company } = useSelector((state) => state.staff);
-
+  console.log(company);
   const dispatch = useDispatch();
 
   return (
     <div>
       {company.length > 0 ? (
-        <Paper className="w-full lg:w-2/4 my-10 mx-auto">
+        <Paper className="w-full lg:w-3/4 my-10 mx-auto">
           {company.length > 1 ? (
             <h2 className="font-bold text-center">Oyaanow Companies</h2>
           ) : (
@@ -39,6 +37,9 @@ export default function CompanyTable({
                   <TableCell className="bg-black text-white">Name</TableCell>
                   <TableCell className="bg-black text-white">Email</TableCell>
                   <TableCell className="bg-black text-white">
+                    Phone Number
+                  </TableCell>
+                  <TableCell className="bg-black text-white">
                     Last Update By
                   </TableCell>
                   <TableCell className="bg-black text-black">Delete</TableCell>
@@ -46,9 +47,10 @@ export default function CompanyTable({
               </TableHead>
               <TableBody>
                 {company.map((row) => (
-                  <TableRow key={row._id}>
+                  <TableRow hover key={row._id}>
                     <TableCell className="font-bold">{row.name}</TableCell>
                     <TableCell>{row.email}</TableCell>
+                    <TableCell>{row.phoneNumber}</TableCell>
                     <TableCell>{row.lastUpdatedBy.name}</TableCell>
                     <TableCell
                       onClick={() => {

@@ -93,7 +93,7 @@ export default function RouteTable({
             </TableHead>
             <TableBody>
               {user.company.nyscRoutes.map((row) => (
-                <TableRow key={row._id}>
+                <TableRow key={row._id} hover>
                   <TableCell className="text-center">{row.state.to}</TableCell>
                   <TableCell>{row.state.from}</TableCell>
                   <TableCell className="text-center">

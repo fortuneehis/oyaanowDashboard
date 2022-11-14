@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import { getCompany } from "../features/companySlice";
 import { addBus, addTerminal, addRoute } from "../features/companySlice";
 import { API } from "../hooks/axiosInterceptor";
-// import { addNysccRoute } from "../features/companySlice";
 import AdminTerminalTable from "./AdminTerminalTable";
 import AdminBusTable from "./AdminBusTable";
 import AdminRouteTable from "./AdminRouteTable";
@@ -578,7 +577,9 @@ export default function Company() {
             >
               <option value="">Terminal From</option>
               {terminals.map((terminal) => (
-                <option value={terminal._id}>{terminal.location}</option>
+                <option value={terminal._id}>
+                  {terminal.location} {terminal.companyName}
+                </option>
               ))}
             </select>
             <select
@@ -595,7 +596,9 @@ export default function Company() {
             >
               <option value="">Terminal To</option>
               {terminals.map((terminal) => (
-                <option value={terminal._id}>{terminal.location}</option>
+                <option value={terminal._id}>
+                  {terminal.location} {terminal.companyName}
+                </option>
               ))}
             </select>
           </div>
@@ -608,7 +611,9 @@ export default function Company() {
             >
               <option value="">Bus</option>
               {buses.map((bus) => (
-                <option value={bus._id}>{bus.name}</option>
+                <option value={bus._id}>
+                  {bus.name} {bus.companyName}
+                </option>
               ))}
             </select>
             <input
@@ -775,7 +780,9 @@ export default function Company() {
             >
               <option value="">Terminal From</option>
               {terminals.map((terminal) => (
-                <option value={terminal._id}>{terminal.location}</option>
+                <option value={terminal._id}>
+                  {terminal.location} {terminal.companyName}
+                </option>
               ))}
             </select>
             <select
@@ -792,7 +799,9 @@ export default function Company() {
             >
               <option value="">Terminal To</option>
               {terminals.map((terminal) => (
-                <option value={terminal._id}>{terminal.location}</option>
+                <option value={terminal._id}>
+                  {terminal.location} {terminal.companyName}
+                </option>
               ))}
             </select>
           </div>
@@ -805,7 +814,9 @@ export default function Company() {
             >
               <option value="">Bus</option>
               {buses.map((bus) => (
-                <option value={bus._id}>{bus.name}</option>
+                <option value={bus._id}>
+                  {bus.name} {bus.companyName}
+                </option>
               ))}
             </select>
             <input
