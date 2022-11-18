@@ -171,8 +171,7 @@ export default function StickyHeadTable() {
                   var yyyy = todays.getFullYear();
 
                   todays = yyyy + "-" + mm + "-" + dd;
-                  console.log(todays);
-                  console.log(todayValue);
+
                   if (todayValue === "") {
                     return customer;
                   } else if (todayValue === todays) {
@@ -300,23 +299,23 @@ export default function StickyHeadTable() {
                         Click to View
                       </button>
                     </TableCell>
-                    <TableCell className="text-center">
-                      {/* <a
+                    <TableCell className="text-center transition hover:scale-105 active:scale-90 cursor-pointer">
+                      <a
                         className="border px-2 transition hover:scale-105 active:scale-90"
-                        href={row.travellingCompanionInfo.marriageCertificate}
+                        href={row.travellingCompanionInfo?.marriageCertificate}
                         download={`${row.firstname} travelCompanionmarriageCert`}
                       >
                         Download
-                      </a> */}
+                      </a>
                     </TableCell>
-                    <TableCell className="text-center">
-                      {/* <a
+                    <TableCell className="text-center transition hover:scale-105 active:scale-90 cursor-pointer">
+                      <a
                         className="border px-2 transition hover:scale-105 active:scale-90"
-                        href={row.travellingCompanionInfo.affidavit}
-                        download={`${row.firstname} affidavit`}
+                        href={row.travellingCompanionInfo?.affidavit}
+                        download={`${row.firstname} travellingCompanionAffidavit`}
                       >
                         Download
-                      </a> */}
+                      </a>
                     </TableCell>
                   </TableRow>
                 ))}

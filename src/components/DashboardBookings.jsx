@@ -97,9 +97,7 @@ export default function StickyHeadTable() {
                 <TableCell className="text-center bg-black text-white">
                   Seat
                 </TableCell>
-                <TableCell className="text-center bg-black text-white">
-                  Paid
-                </TableCell>
+
                 <TableCell className="text-center bg-black text-white">
                   Time
                 </TableCell>
@@ -176,7 +174,7 @@ export default function StickyHeadTable() {
                     <TableCell className="text-center">{row.gender}</TableCell>
                     <TableCell className="text-center">{row.bus}</TableCell>
                     <TableCell className="text-center">{row.seat}</TableCell>
-                    <TableCell className="text-center">{row.paid}</TableCell>
+
                     <TableCell className="text-center">{row.time}</TableCell>
                     <TableCell className="text-center">
                       {row.transactionRef}
