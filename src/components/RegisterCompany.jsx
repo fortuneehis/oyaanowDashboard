@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Alert from "@mui/material/Alert";
-import Stack from "@mui/material/Stack";
 import { useNavigate } from "react-router-dom";
 import { BsBoxArrowRight } from "react-icons/bs";
 import { useSelector } from "react-redux";
@@ -38,7 +36,6 @@ const Register = () => {
 
   const register = (e) => {
     e.preventDefault();
-    console.log(companyData);
     dispatch(registerCompany(companyData));
     setCompanyData({
       ...companyData,

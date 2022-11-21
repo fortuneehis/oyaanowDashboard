@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const loginUrl = "https://oyanow-api.herokuapp.com/staff/signin";
+const loginUrl = "https://api.oyaanow.com/staff/signin";
 
 export const logging = (data) => {
   return new Promise(async (resolve, reject) => {

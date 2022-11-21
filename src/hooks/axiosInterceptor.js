@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const API = axios.create({
-  baseURL: "https://oyanow-api.herokuapp.com/",
+  baseURL: "https://api.oyaanow.com/",
 });
 
 API.interceptors.request.use((req) => {
