@@ -55,8 +55,8 @@ function App() {
 
         <Route element={<PrivateRoutesDashboard />}>
           <Route path="dashboard" element={<Dashboard />}>
-            <Route path="/dashboard/home" element={<DashboardHome />} />
             <Route path="/dashboard/profile" element={<DashboardProfile />} />
+            <Route path="/dashboard/home" element={<DashboardHome />} />
             <Route path="/dashboard/company" element={<DashboardCompany />} />
 
             <Route path="/dashboard/bookings" element={<DashboardBookings />} />

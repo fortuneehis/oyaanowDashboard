@@ -97,10 +97,10 @@ export default function RouteTable({
                   <TableCell className="text-center">{row.state.to}</TableCell>
                   <TableCell>{row.state.from}</TableCell>
                   <TableCell className="text-center">
-                    {row.terminal.to.landmark}
+                    {row.terminal.to.location}
                   </TableCell>
                   <TableCell className="text-center">
-                    {row.terminal.from.landmark}
+                    {row.terminal.from.location}
                   </TableCell>
 
                   <TableCell className="text-center">
