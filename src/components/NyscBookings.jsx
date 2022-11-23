@@ -130,7 +130,7 @@ export default function StickyHeadTable() {
                 .filter((customer) => {
                   return search.toLowerCase() === ""
                     ? customer
-                    : customer._id.includes(search);
+                    : customer.ticketId?.includes(search);
                 })
                 .filter((customer) => {
                   const bookingDate = customer.date;
@@ -163,7 +163,9 @@ export default function StickyHeadTable() {
                     <TableCell className="text-center">
                       {row.state.from}
                     </TableCell>
-                    <TableCell className="text-center">{row._id}</TableCell>
+                    <TableCell className="text-center">
+                      {row.ticketId}
+                    </TableCell>
                     <TableCell className="text-center">
                       {row.terminal.to}
                     </TableCell>
