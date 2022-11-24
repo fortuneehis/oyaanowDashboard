@@ -135,7 +135,7 @@ export default function StickyHeadTable() {
                       : customer.ticketId?.includes(search);
                   })
                   .filter((customer) => {
-                    const bookingDate = customer.date;
+                    const bookingDate = customer.createdAt;
                     var todays = new Date(bookingDate);
                     var dd = String(todays.getDate()).padStart(2, "0");
                     var mm = String(todays.getMonth() + 1).padStart(2, "0");
