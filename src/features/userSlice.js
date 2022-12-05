@@ -93,7 +93,6 @@ export const addNyscRoute = createAsyncThunk(
   async (nyscRouteData) => {
     try {
       const res = await API.post("/company/addnyscroute", nyscRouteData);
-      console.log(res);
       return res.data.data;
     } catch (error) {
       alert(error.response.data.message);
@@ -226,7 +225,6 @@ const userSlice = createSlice({
       const updatedTerminal = state.user.company.terminals.filter(
         (terminal) => terminal._id !== payload
       );
-      console.log(updatedTerminal);
       return {
         ...state,
         user: {
@@ -282,7 +280,6 @@ const userSlice = createSlice({
       const updatedRoutes = state.user.company.routes.filter(
         (route) => route._id !== payload
       );
-      console.log(updatedRoutes);
       return {
         ...state,
         user: {

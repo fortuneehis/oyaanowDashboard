@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { BsBoxArrowRight } from "react-icons/bs";
-import { API } from "../hooks/axiosInterceptor";
 import { useSelector, useDispatch } from "react-redux";
 import { registerStaff } from "../features/staffSlice";
 
@@ -55,6 +54,7 @@ const Register = () => {
             }}
             type="text"
             placeholder="Firstname"
+            required
           />
           <input
             className="border border-black  focus:outline-none rounded-sm py-2 px-4 my-3"
@@ -64,6 +64,7 @@ const Register = () => {
             }}
             type="text"
             placeholder="Lastname"
+            required
           />
           <input
             className="border border-black  focus:outline-none rounded-sm py-2 px-4 my-3"
@@ -73,6 +74,7 @@ const Register = () => {
             }}
             type="email"
             placeholder="Email"
+            required
           />
 
           <input
@@ -83,9 +85,11 @@ const Register = () => {
             }}
             type="text"
             placeholder="Phone Number"
+            required
           />
           <select
             className="border border-black  focus:outline-none rounded-sm py-2 px-4 my-3"
+            required
             onChange={(e) => {
               if (e.target.value === "admin") {
                 setUser({
@@ -129,6 +133,7 @@ const Register = () => {
             }}
             type="password"
             placeholder="Password"
+            required
           />
           <input
             className="border border-black  focus:outline-none rounded-sm py-2 px-4 my-3"

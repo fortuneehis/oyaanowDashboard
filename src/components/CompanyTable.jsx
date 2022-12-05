@@ -18,7 +18,6 @@ export default function CompanyTable({
   setCompanyModal,
 }) {
   const { company } = useSelector((state) => state.staff);
-  console.log(company);
   const dispatch = useDispatch();
 
   return (

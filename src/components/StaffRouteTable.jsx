@@ -28,12 +28,7 @@ export default function RouteTable({
           Routes
         </button>
       </div>
-      <Paper
-        sx={{
-          width: "100%",
-          overflow: "hidden",
-        }}
-      >
+      <Paper className="w-4/4 lg:w-4/4 my-10 mx-auto">
         {user.company.routes.length > 1 ? (
           <h2 className="font-bold text-center">{user.company.name} Routes</h2>
         ) : (
@@ -68,9 +63,7 @@ export default function RouteTable({
                 <TableCell className="bg-black text-white text-center">
                   Bus
                 </TableCell>
-                <TableCell className="bg-black text-white text-center">
-                  Booked Seats
-                </TableCell>
+
                 <TableCell className="bg-black text-white text-center">
                   Available Seats
                 </TableCell>
@@ -105,9 +98,7 @@ export default function RouteTable({
                   <TableCell className="text-center">
                     {row.buses[0].name}
                   </TableCell>
-                  <TableCell className="text-center">
-                    {row.buses[0].bookedSeats}
-                  </TableCell>
+
                   <TableCell className="text-center">
                     {row.buses[0].availableSeats}
                   </TableCell>

@@ -124,6 +124,11 @@ export default function StickyHeadTable() {
             <TableBody>
               {customers
                 .filter((customer) => {
+                  if (customer.nysc !== "nysc") {
+                    return customer;
+                  }
+                })
+                .filter((customer) => {
                   return search.toLowerCase() === ""
                     ? customer
                     : customer.ticketId?.includes(search);

@@ -11,6 +11,7 @@ import StaffTerminalTable from "./StaffTerminalTable";
 import StaffRouteTable from "./StaffRouteTable";
 import StaffNyscTable from "./StaffNyscTable";
 import StaffReservationModal from "./StaffReservationModal";
+import { states } from "../hooks/StateNames";
 
 export default function StickyHeadTable() {
   const dispatch = useDispatch();
@@ -56,13 +57,23 @@ export default function StickyHeadTable() {
   const addTheRoute = (e) => {
     e.preventDefault();
     dispatch(addRoute(routeData));
-    console.log(routeData);
+
     setRouteData({
       ...routeData,
       state: {
         from: "",
         to: "",
       },
+      terminal: {
+        from: "",
+        to: "",
+      },
+      buses: [
+        {
+          id: "",
+          fare: "",
+        },
+      ],
       departureDate: "",
       recurring: "",
     });
@@ -98,6 +109,16 @@ export default function StickyHeadTable() {
         from: "",
         to: "",
       },
+      terminal: {
+        from: "",
+        to: "",
+      },
+      buses: [
+        {
+          id: "",
+          fare: "",
+        },
+      ],
       departureDate: "",
       recurring: "",
     });
@@ -247,6 +268,7 @@ export default function StickyHeadTable() {
               className="text-black px-2 py-1 outline-none border shadow-sm rounded-sm"
               type="text"
               name="name"
+              required
             />
           </div>
           <div className="flex flex-col lg:flex-row  items-center justify-between">
@@ -281,7 +303,7 @@ export default function StickyHeadTable() {
           className="shadow-2xl relative text-black w-3/4 lg:w-3/6 mx-auto my-4 space-y-4 py-2 px-2 rounded-md"
         >
           <div className="flex flex-col lg:flex-row  items-center justify-between">
-            <label htmlFor="location">Location</label>
+            <label htmlFor="location">City</label>
             <input
               value={terminalData.location}
               onChange={(e) => {
@@ -292,8 +314,8 @@ export default function StickyHeadTable() {
               }}
               className="text-black border px-2 py-1 outline-none shadow-sm rounded-sm"
               type="text"
-              placeholder="e.g Benin-Ugbowo"
               name="location"
+              required
             />
           </div>
           <div className="flex flex-col lg:flex-row  items-center justify-between">
@@ -309,6 +331,7 @@ export default function StickyHeadTable() {
               className="text-black border px-2 py-1 outline-none shadow-sm rounded-sm"
               type="text"
               name="address"
+              required
             />
           </div>
           <div className="flex flex-col lg:flex-row  items-center justify-between">
@@ -353,9 +376,30 @@ export default function StickyHeadTable() {
         >
           <div className="flex space-y-2 flex-col  items-center lg:items-start">
             <label htmlFor="state">State</label>
-            <input
+            <select
+              className="text-black border px-2 py-1 outline-none shadow-sm w-full rounded-sm"
+              value={routeData.state.from}
+              onChange={(e) => {
+                setRouteData((state) => ({
+                  ...state,
+                  state: {
+                    ...state.state,
+                    from: e.target.value,
+                  },
+                }));
+              }}
+              required
+            >
+              <option value="">State From</option>
+              {states.map((state) => (
+                <option key={state.name} value={state.name}>
+                  {state.name}
+                </option>
+              ))}
+            </select>
+            <select
+              className="text-black border px-2 py-1 outline-none shadow-sm w-full rounded-sm"
               value={routeData.state.to}
-              placeholder="To where"
               onChange={(e) => {
                 setRouteData({
                   ...routeData,
@@ -365,32 +409,20 @@ export default function StickyHeadTable() {
                   },
                 });
               }}
-              className="text-black border px-2 py-1 outline-none w-full shadow-sm rounded-sm"
-              type="text"
-              name="state"
-            />
-            <input
-              value={routeData.state.from}
-              placeholder="From where"
-              onChange={(e) => {
-                setRouteData({
-                  ...routeData,
-                  state: {
-                    ...routeData.state,
-                    from: e.target.value,
-                  },
-                });
-              }}
-              className="text-black border px-2 py-1 outline-none w-full shadow-sm rounded-sm"
-              type="text"
-              name="state"
-            />
+              required
+            >
+              <option value="">State To</option>
+              {states.map((state) => (
+                <option value={state.name}>{state.name}</option>
+              ))}
+            </select>
           </div>
 
           <div className="flex flex-col items-center lg:items-start space-y-2">
             <label htmlFor="terminal">Terminal</label>
             <select
               className="text-black border px-2 py-1 outline-none shadow-sm w-full rounded-sm"
+              value={routeData.terminal.from}
               onChange={(e) => {
                 setRouteData((state) => ({
                   ...state,
@@ -400,14 +432,16 @@ export default function StickyHeadTable() {
                   },
                 }));
               }}
+              required
             >
               <option value="">Terminal From</option>
               {user.company.terminals.map((terminal) => (
-                <option value={terminal._id}>{terminal.landmark}</option>
+                <option value={terminal._id}>{terminal.location}</option>
               ))}
             </select>
             <select
               className="text-black border px-2 py-1 outline-none shadow-sm w-full rounded-sm"
+              value={routeData.terminal.to}
               onChange={(e) => {
                 setRouteData({
                   ...routeData,
@@ -417,10 +451,11 @@ export default function StickyHeadTable() {
                   },
                 });
               }}
+              required
             >
               <option value="">Terminal To</option>
               {user.company.terminals.map((terminal) => (
-                <option value={terminal._id}>{terminal.landmark}</option>
+                <option value={terminal._id}>{terminal.location}</option>
               ))}
             </select>
           </div>
@@ -429,7 +464,9 @@ export default function StickyHeadTable() {
             <label htmlFor="buses">Bus</label>
             <select
               className="text-black border px-2 py-1 outline-none shadow-sm w-full rounded-sm"
+              value={routeData.buses[0].id}
               onChange={handleAddBus}
+              required
             >
               <option value="">Bus</option>
               {user.company.buses.map((bus) => (
@@ -437,6 +474,7 @@ export default function StickyHeadTable() {
               ))}
             </select>
             <input
+              value={routeData.buses[0].fare}
               onChange={(e) => {
                 setRouteData({
                   ...routeData,
@@ -452,6 +490,7 @@ export default function StickyHeadTable() {
               type="text"
               placeholder="Fare"
               name="fare"
+              required
             />
           </div>
           <div className="flex flex-col lg:flex-row  items-center justify-between">
@@ -465,6 +504,7 @@ export default function StickyHeadTable() {
               type="time"
               name="departureTimes"
               multiple
+              required
             />
           </div>
           <div className="flex flex-col lg:flex-row  items-center justify-between">
@@ -490,6 +530,7 @@ export default function StickyHeadTable() {
               name="recurring"
               id="recurring"
               className="text-black shadow-sm px-2 py border"
+              required
             >
               <option value="">Please Select</option>
               <option value="none">None</option>
@@ -528,9 +569,30 @@ export default function StickyHeadTable() {
         >
           <div className="flex space-y-2 flex-col  items-center lg:items-start">
             <label htmlFor="state">State</label>
-            <input
+            <select
+              className="text-black border px-2 py-1 outline-none shadow-sm w-full rounded-sm"
+              value={nyscRouteData.state.from}
+              onChange={(e) => {
+                setNyscRouteData((state) => ({
+                  ...state,
+                  state: {
+                    ...state.state,
+                    from: e.target.value,
+                  },
+                }));
+              }}
+              required
+            >
+              <option value="">State From</option>
+              {states.map((state) => (
+                <option key={state.name} value={state.name}>
+                  {state.name}
+                </option>
+              ))}
+            </select>
+            <select
+              className="text-black border px-2 py-1 outline-none shadow-sm w-full rounded-sm"
               value={nyscRouteData.state.to}
-              placeholder="To where"
               onChange={(e) => {
                 setNyscRouteData({
                   ...nyscRouteData,
@@ -540,32 +602,20 @@ export default function StickyHeadTable() {
                   },
                 });
               }}
-              className="text-black border px-2 py-1 outline-none w-full shadow-sm rounded-sm"
-              type="text"
-              name="state"
-            />
-            <input
-              value={nyscRouteData.state.from}
-              placeholder="From where"
-              onChange={(e) => {
-                setNyscRouteData({
-                  ...nyscRouteData,
-                  state: {
-                    ...nyscRouteData.state,
-                    from: e.target.value,
-                  },
-                });
-              }}
-              className="text-black border px-2 py-1 outline-none w-full shadow-sm rounded-sm"
-              type="text"
-              name="state"
-            />
+              required
+            >
+              <option value="">State To</option>
+              {states.map((state) => (
+                <option value={state.name}>{state.name}</option>
+              ))}
+            </select>
           </div>
 
           <div className="flex flex-col items-center lg:items-start space-y-2">
             <label htmlFor="terminal">Terminal</label>
             <select
               className="text-black border px-2 py-1 outline-none shadow-sm w-full rounded-sm"
+              value={nyscRouteData.terminal.from}
               onChange={(e) => {
                 setNyscRouteData((state) => ({
                   ...state,
@@ -575,6 +625,7 @@ export default function StickyHeadTable() {
                   },
                 }));
               }}
+              required
             >
               <option value="">Terminal From</option>
               {user.company.terminals.map((terminal) => (
@@ -583,6 +634,7 @@ export default function StickyHeadTable() {
             </select>
             <select
               className="text-black border px-2 py-1 outline-none shadow-sm w-full rounded-sm"
+              value={nyscRouteData.terminal.to}
               onChange={(e) => {
                 setNyscRouteData({
                   ...nyscRouteData,
@@ -592,6 +644,7 @@ export default function StickyHeadTable() {
                   },
                 });
               }}
+              required
             >
               <option value="">Terminal To</option>
               {user.company.terminals.map((terminal) => (
@@ -603,8 +656,10 @@ export default function StickyHeadTable() {
           <div className="flex flex-col items-center lg:items-start space-y-2">
             <label htmlFor="buses">Bus</label>
             <select
+              value={nyscRouteData.buses[0].id}
               className="text-black border px-2 py-1 outline-none shadow-sm w-full rounded-sm"
               onChange={handleAddNyscBus}
+              required
             >
               <option value="">Bus</option>
               {user.company.buses.map((bus) => (
@@ -612,6 +667,7 @@ export default function StickyHeadTable() {
               ))}
             </select>
             <input
+              value={nyscRouteData.buses[0].fare}
               onChange={(e) => {
                 setNyscRouteData({
                   ...nyscRouteData,
@@ -627,6 +683,7 @@ export default function StickyHeadTable() {
               type="text"
               placeholder="Fare"
               name="fare"
+              required
             />
           </div>
 
@@ -640,6 +697,7 @@ export default function StickyHeadTable() {
               type="time"
               name="departureTimes"
               multiple
+              required
             />
           </div>
           <div className="flex flex-col lg:flex-row  items-center justify-between">
@@ -671,6 +729,7 @@ export default function StickyHeadTable() {
               name="recurring"
               id="recurring"
               className="text-black shadow-sm px-2 py border"
+              required
             >
               <option value="">Please Select</option>
               <option value="none">None</option>

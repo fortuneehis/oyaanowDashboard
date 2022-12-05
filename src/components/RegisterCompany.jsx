@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { BsBoxArrowRight } from "react-icons/bs";
-import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { registerCompany } from "../features/staffSlice";
 import bankCodes from "../hooks/bankCodes.json";
@@ -63,6 +62,7 @@ const Register = () => {
             }}
             type="text"
             placeholder="Name"
+            required
           />
 
           <input
@@ -74,6 +74,7 @@ const Register = () => {
             }}
             type="email"
             placeholder="Email"
+            required
           />
           <input
             className="border border-black  focus:outline-none rounded-sm py-2 px-4 my-3"
@@ -83,6 +84,7 @@ const Register = () => {
             }}
             type="text"
             placeholder="Phone Number"
+            required
           />
           <label htmlFor="logo" className="text-slate-400 mb-1 ">
             Logo
@@ -102,6 +104,7 @@ const Register = () => {
             type="file"
             accept="image/*"
             placeholder="Logo"
+            required
           />
           <input
             value={companyData.accountNumber}
@@ -111,6 +114,7 @@ const Register = () => {
             }}
             type="text"
             placeholder="Account Number"
+            required
           />
           <select
             value={companyData.bank}
@@ -120,6 +124,7 @@ const Register = () => {
             className="border border-black  focus:outline-none rounded-sm py-2 px-4 my-3 mt-4"
             name="bankCode"
             id="bankCode"
+            required
           >
             <option value="">Select Bank</option>
             {bankCodes.map((bank) => (

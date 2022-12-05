@@ -72,9 +72,7 @@ export default function RouteTable({
                 <TableCell className="bg-black text-white text-center">
                   Fare
                 </TableCell>
-                <TableCell className="bg-black text-white text-center">
-                  Booked Seats
-                </TableCell>
+
                 <TableCell className="bg-black text-white text-center">
                   Available Seats
                 </TableCell>
@@ -112,9 +110,7 @@ export default function RouteTable({
                   <TableCell className="text-center">
                     {row.buses[0].fare}
                   </TableCell>
-                  <TableCell className="text-center">
-                    {row.buses[0].bookedSeats}
-                  </TableCell>
+
                   <TableCell className="text-center">
                     {row.buses[0].availableSeats}
                   </TableCell>

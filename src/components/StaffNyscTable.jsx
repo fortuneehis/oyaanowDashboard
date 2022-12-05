@@ -6,8 +6,8 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useState } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 import StaffNyscModal from "./StaffNyscModal";
@@ -29,12 +29,7 @@ export default function RouteTable({
           Nysc Routes
         </button>
       </div>
-      <Paper
-        sx={{
-          width: "100%",
-          overflow: "hidden",
-        }}
-      >
+      <Paper className="w-4/4 lg:w-4/4 my-10 mx-auto">
         {user.company.nyscRoutes.length > 1 ? (
           <h2 className="font-bold text-center">
             {user.company.name} Nysc Routes
@@ -76,9 +71,7 @@ export default function RouteTable({
                 <TableCell className="bg-black text-white text-center">
                   Fare
                 </TableCell>
-                <TableCell className="bg-black text-white text-center">
-                  Booked Seats
-                </TableCell>
+
                 <TableCell className="bg-black text-white text-center">
                   Available Seats
                 </TableCell>
@@ -94,33 +87,33 @@ export default function RouteTable({
             <TableBody>
               {user.company.nyscRoutes.map((row) => (
                 <TableRow key={row._id} hover>
-                  <TableCell className="text-center">{row.state.to}</TableCell>
-                  <TableCell>{row.state.from}</TableCell>
+                  <TableCell className="text-center">{row.state?.to}</TableCell>
+                  <TableCell>{row?.state?.from}</TableCell>
                   <TableCell className="text-center">
-                    {row.terminal.to.location}
+                    {row?.terminal?.to.location}
                   </TableCell>
                   <TableCell className="text-center">
-                    {row.terminal.from.location}
+                    {row?.terminal?.from.location}
                   </TableCell>
 
                   <TableCell className="text-center">
-                    {row.departureTimes}
+                    {row?.departureTimes}
                   </TableCell>
                   <TableCell className="text-center">
-                    {row.departureDate}
-                  </TableCell>
-                  <TableCell className="text-center">{row.recurring}</TableCell>
-                  <TableCell className="text-center">
-                    {row.buses[0].name}
+                    {row?.departureDate}
                   </TableCell>
                   <TableCell className="text-center">
-                    {row.buses[0].fare}
+                    {row?.recurring}
                   </TableCell>
                   <TableCell className="text-center">
-                    {row.buses[0].bookedSeats}
+                    {row?.buses[0].name}
                   </TableCell>
                   <TableCell className="text-center">
-                    {row.buses[0].availableSeats}
+                    {row?.buses[0].fare}
+                  </TableCell>
+
+                  <TableCell className="text-center">
+                    {row?.buses[0].availableSeats}
                   </TableCell>
                   <TableCell className="text-center">
                     <button
@@ -135,7 +128,7 @@ export default function RouteTable({
                     </button>
                   </TableCell>
                   <TableCell className="text-center">
-                    {row.addedBy?.name}
+                    {row?.addedBy?.name}
                   </TableCell>
                   <TableCell
                     onClick={() => {

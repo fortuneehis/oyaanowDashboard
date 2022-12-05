@@ -40,7 +40,7 @@ export default function TerminalTable() {
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>
-                <TableCell className="bg-black text-white">Location</TableCell>
+                <TableCell className="bg-black text-white">City</TableCell>
                 <TableCell className="bg-black text-white">Address</TableCell>
                 <TableCell className="bg-black text-white">Landmark</TableCell>
                 <TableCell className="bg-black text-white">Added By</TableCell>

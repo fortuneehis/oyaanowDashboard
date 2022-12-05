@@ -31,7 +31,7 @@ export default function BusTable() {
         </button>
       </div>
       <div>
-        <Paper className="w-full lg:w-3/4 my-10 mx-auto">
+        <Paper className="w-full lg:w-2/4 my-10 mx-auto">
           {user.company.buses.length > 1 ? (
             <h2 className="font-bold text-center">{user.company.name} Buses</h2>
           ) : (

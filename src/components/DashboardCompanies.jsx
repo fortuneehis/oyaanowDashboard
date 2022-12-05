@@ -11,6 +11,7 @@ import AdminBusTable from "./AdminBusTable";
 import AdminRouteTable from "./AdminRouteTable";
 import AdminNyscTable from "./AdminNyscTable";
 import ReservationModal from "./ReservationModal";
+import { states } from "../hooks/StateNames";
 
 export default function Company() {
   const dispatch = useDispatch();
@@ -200,15 +201,23 @@ export default function Company() {
   const addTheRoute = (e) => {
     e.preventDefault();
     dispatch(addRoute(routeData));
-    console.log(routeData);
     setRouteData({
       ...routeData,
-      company: "",
       state: {
         from: "",
         to: "",
       },
-
+      terminal: {
+        from: "",
+        to: "",
+      },
+      buses: [
+        {
+          id: "",
+          fare: "",
+        },
+      ],
+      company: "",
       departureDate: "",
       recurring: "",
     });
@@ -216,20 +225,27 @@ export default function Company() {
 
   const addTheNyscRoute = async (e) => {
     e.preventDefault();
-    console.log(nyscRouteData);
 
     try {
-      console.log(nyscRouteData);
       const res = await API.post("/company/addnyscroute", nyscRouteData);
       dispatch(getCompany());
       setNyscRouteData({
         ...nyscRouteData,
-        company: "",
         state: {
           from: "",
           to: "",
         },
-
+        terminal: {
+          from: "",
+          to: "",
+        },
+        buses: [
+          {
+            id: "",
+            fare: "",
+          },
+        ],
+        company: "",
         departureDate: "",
         recurring: "",
       });
@@ -324,6 +340,7 @@ export default function Company() {
               className="text-black border px-2 py-1 outline-none rounded-sm shadow-sm"
               name="company"
               id="company"
+              required
               onChange={(e) => {
                 setBusData({ ...busData, company: e.target.value });
               }}
@@ -373,6 +390,7 @@ export default function Company() {
                 setBusData({ ...busData, name: e.target.value });
               }}
               className="text-black px-2 py-1 outline-none border shadow-sm rounded-sm"
+              required
               type="text"
               name="name"
             />
@@ -423,6 +441,7 @@ export default function Company() {
               className="text-black border px-2 py-1 outline-none rounded-sm shadow-sm"
               name="company"
               id="company"
+              required
               onChange={(e) => {
                 setTerminalData({ ...terminalData, company: e.target.value });
               }}
@@ -436,9 +455,10 @@ export default function Company() {
             </select>
           </div>
           <div className="flex flex-col lg:flex-row  items-center justify-between">
-            <label htmlFor="location">Location</label>
+            <label htmlFor="location">City</label>
             <input
               value={terminalData.location}
+              required
               onChange={(e) => {
                 setTerminalData({
                   ...terminalData,
@@ -447,7 +467,6 @@ export default function Company() {
               }}
               className="text-black border px-2 py-1 outline-none shadow-sm rounded-sm"
               type="text"
-              placeholder="e.g Benin-Ugbowo"
               name="location"
             />
           </div>
@@ -461,6 +480,7 @@ export default function Company() {
                   address: e.target.value,
                 });
               }}
+              required
               className="text-black border px-2 py-1 outline-none shadow-sm rounded-sm"
               type="text"
               name="address"
@@ -512,6 +532,7 @@ export default function Company() {
               className="text-black border px-2 py-1 outline-none rounded-sm shadow-sm"
               name="company"
               id="company"
+              required
               onChange={(e) => {
                 setRouteData({ ...routeData, company: e.target.value });
               }}
@@ -527,9 +548,30 @@ export default function Company() {
 
           <div className="flex space-y-2 flex-col  items-center lg:items-start">
             <label htmlFor="state">State</label>
-            <input
+            <select
+              value={routeData.state.from}
+              className="text-black border px-2 py-1 outline-none shadow-sm w-full rounded-sm"
+              onChange={(e) => {
+                setRouteData((state) => ({
+                  ...state,
+                  state: {
+                    ...state.state,
+                    from: e.target.value,
+                  },
+                }));
+              }}
+              required
+            >
+              <option value="">State From</option>
+              {states.map((state) => (
+                <option key={state.name} value={state.name}>
+                  {state.name}
+                </option>
+              ))}
+            </select>
+            <select
+              className="text-black border px-2 py-1 outline-none shadow-sm w-full rounded-sm"
               value={routeData.state.to}
-              placeholder="To where"
               onChange={(e) => {
                 setRouteData({
                   ...routeData,
@@ -539,32 +581,20 @@ export default function Company() {
                   },
                 });
               }}
-              className="text-black border px-2 py-1 outline-none w-full shadow-sm rounded-sm"
-              type="text"
-              name="state"
-            />
-            <input
-              value={routeData.state.from}
-              placeholder="From where"
-              onChange={(e) => {
-                setRouteData({
-                  ...routeData,
-                  state: {
-                    ...routeData.state,
-                    from: e.target.value,
-                  },
-                });
-              }}
-              className="text-black border px-2 py-1 outline-none w-full shadow-sm rounded-sm"
-              type="text"
-              name="state"
-            />
+              required
+            >
+              <option value="">State To</option>
+              {states.map((state) => (
+                <option value={state.name}>{state.name}</option>
+              ))}
+            </select>
           </div>
 
           <div className="flex flex-col items-center lg:items-start space-y-2">
             <label htmlFor="terminal">Terminal</label>
             <select
               className="text-black border px-2 py-1 outline-none shadow-sm w-full rounded-sm"
+              value={routeData.terminal.from}
               onChange={(e) => {
                 setRouteData((state) => ({
                   ...state,
@@ -574,6 +604,7 @@ export default function Company() {
                   },
                 }));
               }}
+              required
             >
               <option value="">Terminal From</option>
               {terminals.map((terminal) => (
@@ -584,6 +615,7 @@ export default function Company() {
             </select>
             <select
               className="text-black border px-2 py-1 outline-none shadow-sm w-full rounded-sm"
+              value={routeData.terminal.to}
               onChange={(e) => {
                 setRouteData({
                   ...routeData,
@@ -593,6 +625,7 @@ export default function Company() {
                   },
                 });
               }}
+              required
             >
               <option value="">Terminal To</option>
               {terminals.map((terminal) => (
@@ -608,6 +641,8 @@ export default function Company() {
             <select
               className="text-black border px-2 py-1 outline-none shadow-sm w-full rounded-sm"
               onChange={handleAddBus}
+              value={routeData.buses[0].id}
+              required
             >
               <option value="">Bus</option>
               {buses.map((bus) => (
@@ -617,6 +652,7 @@ export default function Company() {
               ))}
             </select>
             <input
+              value={routeData.buses[0].fare}
               onChange={(e) => {
                 setRouteData({
                   ...routeData,
@@ -632,6 +668,7 @@ export default function Company() {
               type="text"
               placeholder="Fare"
               name="fare"
+              required
             />
           </div>
 
@@ -646,6 +683,7 @@ export default function Company() {
               type="time"
               name="departureTimes"
               multiple
+              required
             />
           </div>
           <div className="flex flex-col lg:flex-row  items-center justify-between">
@@ -668,6 +706,7 @@ export default function Company() {
               onChange={(e) => {
                 setRouteData({ ...routeData, recurring: e.target.value });
               }}
+              required
               name="recurring"
               id="recurring"
               className="text-black shadow-sm px-2 py border"
@@ -718,6 +757,7 @@ export default function Company() {
               onChange={(e) => {
                 setNyscRouteData({ ...nyscRouteData, company: e.target.value });
               }}
+              required
             >
               <option value="">Select company</option>
               {company.map((company) => (
@@ -730,9 +770,30 @@ export default function Company() {
 
           <div className="flex space-y-2 flex-col  items-center lg:items-start">
             <label htmlFor="state">State</label>
-            <input
+            <select
+              className="text-black border px-2 py-1 outline-none shadow-sm w-full rounded-sm"
+              value={nyscRouteData.state.from}
+              onChange={(e) => {
+                setNyscRouteData((state) => ({
+                  ...state,
+                  state: {
+                    ...state.state,
+                    from: e.target.value,
+                  },
+                }));
+              }}
+              required
+            >
+              <option value="">State From</option>
+              {states.map((state) => (
+                <option key={state.name} value={state.name}>
+                  {state.name}
+                </option>
+              ))}
+            </select>
+            <select
+              className="text-black border px-2 py-1 outline-none shadow-sm w-full rounded-sm"
               value={nyscRouteData.state.to}
-              placeholder="To where"
               onChange={(e) => {
                 setNyscRouteData({
                   ...nyscRouteData,
@@ -742,32 +803,20 @@ export default function Company() {
                   },
                 });
               }}
-              className="text-black border px-2 py-1 outline-none w-full shadow-sm rounded-sm"
-              type="text"
-              name="state"
-            />
-            <input
-              value={nyscRouteData.state.from}
-              placeholder="From where"
-              onChange={(e) => {
-                setNyscRouteData({
-                  ...nyscRouteData,
-                  state: {
-                    ...nyscRouteData.state,
-                    from: e.target.value,
-                  },
-                });
-              }}
-              className="text-black border px-2 py-1 outline-none w-full shadow-sm rounded-sm"
-              type="text"
-              name="state"
-            />
+              required
+            >
+              <option value="">State To</option>
+              {states.map((state) => (
+                <option value={state.name}>{state.name}</option>
+              ))}
+            </select>
           </div>
 
           <div className="flex flex-col items-center lg:items-start space-y-2">
             <label htmlFor="terminal">Terminal</label>
             <select
               className="text-black border px-2 py-1 outline-none shadow-sm w-full rounded-sm"
+              value={nyscRouteData.terminal.from}
               onChange={(e) => {
                 setNyscRouteData((state) => ({
                   ...state,
@@ -777,6 +826,7 @@ export default function Company() {
                   },
                 }));
               }}
+              required
             >
               <option value="">Terminal From</option>
               {terminals.map((terminal) => (
@@ -787,6 +837,7 @@ export default function Company() {
             </select>
             <select
               className="text-black border px-2 py-1 outline-none shadow-sm w-full rounded-sm"
+              value={nyscRouteData.terminal.to}
               onChange={(e) => {
                 setNyscRouteData({
                   ...nyscRouteData,
@@ -796,6 +847,7 @@ export default function Company() {
                   },
                 });
               }}
+              required
             >
               <option value="">Terminal To</option>
               {terminals.map((terminal) => (
@@ -810,7 +862,9 @@ export default function Company() {
             <label htmlFor="buses">Bus</label>
             <select
               className="text-black border px-2 py-1 outline-none shadow-sm w-full rounded-sm"
+              value={nyscRouteData.buses[0].id}
               onChange={handleAddNyscBus}
+              required
             >
               <option value="">Bus</option>
               {buses.map((bus) => (
@@ -820,6 +874,7 @@ export default function Company() {
               ))}
             </select>
             <input
+              value={nyscRouteData.buses[0].fare}
               onChange={(e) => {
                 setNyscRouteData({
                   ...nyscRouteData,
@@ -835,6 +890,7 @@ export default function Company() {
               type="text"
               placeholder="Fare"
               name="fare"
+              required
             />
           </div>
 
@@ -848,6 +904,7 @@ export default function Company() {
               type="time"
               name="departureTimes"
               multiple
+              required
             />
           </div>
           <div className="flex flex-col lg:flex-row  items-center justify-between">
@@ -879,6 +936,7 @@ export default function Company() {
               name="recurring"
               id="recurring"
               className="text-black shadow-sm px-2 py border"
+              required
             >
               <option value="">Please Select</option>
               <option value="none">None</option>
