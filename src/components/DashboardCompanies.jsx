@@ -12,6 +12,7 @@ import AdminRouteTable from "./AdminRouteTable";
 import AdminNyscTable from "./AdminNyscTable";
 import ReservationModal from "./ReservationModal";
 import { states } from "../hooks/StateNames";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 export default function Company() {
   const dispatch = useDispatch();
@@ -19,8 +20,29 @@ export default function Company() {
 
   const [reservation, setReservation] = useState([]);
   const [reservationModal, setReservationModal] = useState(false);
-  const [routeTime, setRouteTime] = useState("");
+  const [routeTime, setRouteTime] = useState(["Time", "Time"]);
   const [nyscRouteTime, setNyscRouteTime] = useState("");
+
+  const [timeCount, setTimeCount] = useState(2);
+
+  const routeDepartureTime = (e, index) => {
+    const timeString12hr = new Date(
+      "1970-01-01T" + e.target.value + "Z"
+    ).toLocaleTimeString("en-US", {
+      timeZone: "UTC",
+      hour12: true,
+      hour: "numeric",
+      minute: "numeric",
+    });
+    let data = [...routeTime];
+    data[index] = timeString12hr;
+    setRouteTime(data);
+  };
+  const removeRouteDepartureTime = (index) => {
+    let data = [...routeTime];
+    data.splice(index, 1);
+    setRouteTime(data);
+  };
 
   let routeList = [];
   company.forEach((comp) => {
@@ -124,17 +146,17 @@ export default function Company() {
   });
 
   useEffect(() => {
-    const timeString12hr = new Date(
-      "1970-01-01T" + routeTime + "Z"
-    ).toLocaleTimeString("en-US", {
-      timeZone: "UTC",
-      hour12: true,
-      hour: "numeric",
-      minute: "numeric",
+    console.log(routeData);
+  }, [routeData]);
+
+  useEffect(() => {
+    console.log(routeTime);
+    routeTime.map((item, index) => {
+      console.log(index);
     });
     setRouteData({
       ...routeData,
-      departureTimes: [timeString12hr],
+      departureTimes: routeTime,
     });
   }, [routeTime]);
 
@@ -672,19 +694,48 @@ export default function Company() {
             />
           </div>
 
-          <div className="flex flex-col lg:flex-row  items-center justify-between">
+          <div className="flex flex-col lg:flex-row items-center justify-between">
             <label htmlFor="departureTimes">Departure Time</label>
-            <input
-              // value={routeData.departureTimes}
-              onChange={(e) => {
-                setRouteTime(e.target.value);
-              }}
-              className="text-black border px-2 py-1 outline-none shadow-sm rounded-sm"
-              type="time"
-              name="departureTimes"
-              multiple
-              required
-            />
+            <div className="flex flex-col">
+              {routeTime.map((Time, index) => (
+                <div className="flex space-x-4 items-center">
+                  <div className="flex flex-col items-center">
+                    <input
+                      key={index}
+                      onChange={(e) => {
+                        routeDepartureTime(e, index);
+                      }}
+                      className="text-black border px-2 py-1 outline-none shadow-sm rounded-sm my-2"
+                      type="time"
+                      name="departureTimes"
+                      multiple
+                      required
+                    />
+
+                    {routeTime.length - 1 === index && (
+                      <button
+                        onClick={(e) => {
+                          console.log(routeTime);
+                          setRouteTime([...routeTime, ""]);
+                          e.preventDefault();
+                        }}
+                        className="bg-black text-white text-sm px-2 py-1 font-semibold flex justify -center rounded-sm transition active:scale-90 hover:scale-105"
+                      >
+                        Add Time
+                      </button>
+                    )}
+                  </div>
+                  {routeTime.length > 1 && (
+                    <div
+                      onClick={removeRouteDepartureTime(index)}
+                      className="bg-black text-white px-2 py-1 font-semibold flex justify-center rounded-sm transition active:scale-90 hover:scale-105"
+                    >
+                      <DeleteIcon className="text-sm" />
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
           <div className="flex flex-col lg:flex-row  items-center justify-between">
             <label htmlFor="departureDate">Departure Date</label>
